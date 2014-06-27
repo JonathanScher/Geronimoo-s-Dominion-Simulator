@@ -14,9 +14,11 @@ public class BuyRuleListFactory extends
 
 	private static final int MAX_GENOME_SIZE = 10;
 	BuyConditionFactory buyConditionFactory;
+	CardNameFactory cardNameFactory;
 
 	public BuyRuleListFactory(List<DomCardName> deck) {
 		buyConditionFactory = new BuyConditionFactory(deck);
+		cardNameFactory = new CardNameFactory(deck);
 	}
 
 	@Override
@@ -24,8 +26,12 @@ public class BuyRuleListFactory extends
 		List<DomBuyRule> buyRules = new ArrayList<DomBuyRule>();
 		Integer maxSize = rng.nextInt(MAX_GENOME_SIZE);
 		for (int i = 0; i < maxSize; i++) {
-			DomBuyRule rule = new DomBuyRule("random");
-			rule.addCondition(buyConditionFactory.generateRandomBuyCondition(rng));
+			DomBuyRule rule = new DomBuyRule(
+					cardNameFactory.generateRandomCardName(new Random(System
+							.currentTimeMillis())));
+			rule.addCondition(buyConditionFactory
+					.generateRandomBuyCondition(rng));
+			buyRules.add(rule);
 		}
 		return buyRules;
 	}

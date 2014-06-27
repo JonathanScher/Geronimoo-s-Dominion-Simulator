@@ -2,6 +2,8 @@ package be.aga.dominionSimulator;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
 import be.aga.dominionSimulator.gui.DomBotEditor;
@@ -15,6 +17,10 @@ public class DomBuyRule {
 
 	public DomBuyRule(String aName) {
 		cardToBuy = DomCardName.valueOf(aName);
+	}
+
+	public DomBuyRule(DomCardName cardToBuy) {
+		this.cardToBuy = cardToBuy;
 	}
 
 	public DomBuyRule(String aName, String aPlayStrategy, String aBane) {
@@ -95,5 +101,10 @@ public class DomBuyRule {
 				return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

@@ -1,5 +1,7 @@
 package be.aga.dominionSimulator;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import be.aga.dominionSimulator.enums.DomBotComparator;
 import be.aga.dominionSimulator.enums.DomBotFunction;
 import be.aga.dominionSimulator.enums.DomBotOperator;
@@ -417,5 +419,10 @@ public class DomBuyCondition {
 		theXML.append(theRuleIndentation).append(theIndentation);
 		theXML.append("</condition>").append(newline);
 		return theXML.toString();
+	}
+	
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this);
 	}
 }
