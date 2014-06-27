@@ -2,6 +2,9 @@ package be.aga.dominionSimulator;
 
 import java.util.Comparator;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -15,7 +18,7 @@ public class DomCard implements Comparable< DomCard >{
 	private boolean isTaggedByScheme;
 	private boolean discardAtCleanUp=true;
 
-    public static final Comparator SORT_FOR_TRASHING = new Comparator<DomCard>(){
+    public static final Comparator<DomCard> SORT_FOR_TRASHING = new Comparator<DomCard>(){
         @Override
         public int compare( DomCard aO1, DomCard aO2 ) {
             if (aO1.getTrashPriority()< aO2.getTrashPriority())
@@ -26,7 +29,7 @@ public class DomCard implements Comparable< DomCard >{
         }
       };
 
-      public static final Comparator SORT_FOR_PLAYING = new Comparator<DomCard>(){
+      public static final Comparator<DomCard> SORT_FOR_PLAYING = new Comparator<DomCard>(){
           @Override
           public int compare( DomCard aO1, DomCard aO2 ) {
               if (aO1.getPlayPriority()< aO2.getPlayPriority())
@@ -37,7 +40,7 @@ public class DomCard implements Comparable< DomCard >{
           }
         };
 
-      public static final Comparator SORT_FOR_DISCARDING = new Comparator<DomCard>(){
+      public static final Comparator<DomCard> SORT_FOR_DISCARDING = new Comparator<DomCard>(){
           @Override
           public int compare( DomCard aO1, DomCard aO2 ) {
               if (aO1.getDiscardPriority(1)< aO2.getDiscardPriority(1))
@@ -48,7 +51,7 @@ public class DomCard implements Comparable< DomCard >{
           }
         };
 
-        public static final Comparator SORT_FOR_DISCARD_FROM_HAND = new Comparator<DomCard>(){
+        public static final Comparator<DomCard> SORT_FOR_DISCARD_FROM_HAND = new Comparator<DomCard>(){
             @Override
             public int compare( DomCard aO1, DomCard aO2 ) {
                 int theActionsLeft = aO1.owner.getActionsLeft();
@@ -260,5 +263,14 @@ public class DomCard implements Comparable< DomCard >{
 
 	public void setDiscardAtCleanup(boolean b) {
 	  discardAtCleanUp=b;
+	}
+	
+	@Override
+	public boolean equals(Object other){
+		return EqualsBuilder.reflectionEquals(this, other);
+	}
+	@Override
+	public int hashCode(){
+		return HashCodeBuilder.reflectionHashCode(this);
 	}
 }

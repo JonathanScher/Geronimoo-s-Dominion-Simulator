@@ -8,270 +8,263 @@ import be.aga.dominionSimulator.enums.DomCardType;
 import be.aga.dominionSimulator.gui.DomBuyConditionPanel;
 import be.aga.dominionSimulator.gui.DomBuyRulePanel;
 
-
 public class DomBuyCondition {
-    private DomBotFunction leftFunction;
-    private double leftValue;
-    private DomCardName leftCardName;
-    private DomBotComparator comparator;
-    private DomBotFunction rightFunction;
-    private double rightValue;
-    private DomCardName rightCardName;
-    private DomBotOperator extraOperator=DomBotOperator.plus;
-    private double extraAttribute;
-    private DomCardType rightCardType;
-    private DomCardType leftCardType;
-            
+	private Operand left = new Operand();
+	private DomBotComparator comparator;
+
+	private Operand right = new Operand();
+	private DomBotOperator extraOperator = DomBotOperator.plus;
+	private double extraAttribute;
+
 	public DomBuyCondition(DomBotFunction aLeftFunction,
-			DomCardName aLeftCardName, 
-			DomCardType aLeftCardType, 
-			String aLeftValue,
-			DomBotComparator aComparator, 
-			DomBotFunction aRightFunction,
-			DomCardName aRightCardName, 
-			DomCardType aRightCardType, 
-			String aRightValue,			
-			DomBotOperator anExtraOperator, 
-			String anExtraAttribute) {
-		leftFunction=aLeftFunction;
-		leftCardName=aLeftCardName;
-		leftCardType=aLeftCardType;
-		leftValue=new Double(aLeftValue).doubleValue();
-		comparator=aComparator;
-		rightFunction=aRightFunction;
-		rightCardName=aRightCardName;
-		rightCardType=aRightCardType;
-		rightValue=new Double(aRightValue).doubleValue();
-		extraOperator=anExtraOperator;
-		if (anExtraAttribute==null || anExtraAttribute.equals("")) {
-			extraAttribute=0;
-	    } else { 
-		  extraAttribute=new Double(anExtraAttribute).doubleValue();
-	    }
+			DomCardName aLeftCardName, DomCardType aLeftCardType,
+			String aLeftValue, DomBotComparator aComparator,
+			DomBotFunction aRightFunction, DomCardName aRightCardName,
+			DomCardType aRightCardType, String aRightValue,
+			DomBotOperator anExtraOperator, String anExtraAttribute) {
+		left.setFunction(aLeftFunction);
+		left.setCardName(aLeftCardName);
+		left.setCardType(aLeftCardType);
+		left.setValue(new Double(aLeftValue).doubleValue());
+		comparator = aComparator;
+		right.setFunction(aRightFunction);
+		right.setCardName(aRightCardName);
+		right.setCardType(aRightCardType);
+		right.setValue(new Double(aRightValue).doubleValue());
+		extraOperator = anExtraOperator;
+		if (anExtraAttribute == null || anExtraAttribute.equals("")) {
+			extraAttribute = 0;
+		} else {
+			extraAttribute = new Double(anExtraAttribute).doubleValue();
+		}
 	}
 
 	public DomBuyCondition() {
 	}
 
 	public boolean isTrue(DomPlayer owner) {
-		switch(leftFunction){
-          case countCardsInDeck:
-            leftValue=owner.countInDeck(leftCardName);
-            break;
-          case countCardTypeInDeck:
-            leftValue=owner.count(leftCardType);
-            break;
-          case countCardsInSupply:
-            leftValue=owner.getCurrentGame().countInSupply(leftCardName);
-            break;
-          case countCardsInPlay:
-              leftValue=owner.getCardsFromPlay(leftCardName).size();
-              break;
-          case countCardsInHand:
-              leftValue=owner.getCardsFromHand(leftCardName).size();
-              break;
-          case countAllCardsInDeck:
-              leftValue=owner.countAllCards();
-              break;
-          case countAvailableMoney:
-              leftValue=owner.getAvailableCoins();
-              break;
-          case countTurns:
-              leftValue=owner.getTurns();
-              break;
-          case gainsNeededToEndGame:
-              leftValue=owner.getCurrentGame().getGainsNeededToEndGame();
-              break;
-          case isActionPhase:
-              leftValue=owner.isInBuyPhase()?0:1;
-              break;
-          case countBuysLeft:
-              leftValue=owner.buysLeft;
-              break;
-          case getTotalMoney:
-              leftValue=owner.getTotalMoneyInDeck();
-              break;
-          case getTotalMoneyExcludingNativeVillage:
-              leftValue=owner.getTotalMoneyExcludingNativeVillage();
-              break;
-          case countVP:
-              leftValue=owner.countVictoryPoints();
-              break;
-          case countMAXOpponentVP:
-              leftValue=owner.countMaxOpponentsVictoryPoints();
-              break;
-          case countCardsLeftInDrawDeck:
-              leftValue=owner.getDeck().getDrawDeckSize();
-              break;
-          case countEmptyPiles:
-              leftValue=owner.getCurrentGame().countEmptyPiles();
-              break;
-          case countCardsLeftInSmallestPile:
-              leftValue=owner.getCurrentGame().countCardsInSmallestPile();
-              break;
-          case countCardsInOpponentsDecks:
-        	  leftValue=0;
-        	  for (DomPlayer player : owner.getOpponents())
-        		 leftValue+=player.countInDeck(leftCardName);
-              break;
-		}
-		switch(rightFunction){
-		  case countCardsInDeck:
-			rightValue=owner.countInDeck(rightCardName);
+		switch (left.getFunction()) {
+		case countCardsInDeck:
+			left.setValue(owner.countInDeck(left.getCardName()));
 			break;
-          case countCardTypeInDeck:
-            rightValue=owner.count(rightCardType);
-            break;
-		  case countCardsInSupply:
-			rightValue=owner.getCurrentGame().countInSupply(rightCardName);
+		case countCardTypeInDeck:
+			left.setValue(owner.count(left.getCardType()));
 			break;
-          case countCardsInHand:
-              rightValue=owner.getCardsFromHand(rightCardName).size();
-              break;
-          case countCardsInPlay:
-              rightValue=owner.getCardsFromPlay(rightCardName).size();
-              break;
-          case countAllCardsInDeck:
-              rightValue=owner.countAllCards();
-              break;
-          case countAvailableMoney:
-            rightValue=owner.getAvailableCoins();
-            break;
-          case gainsNeededToEndGame:
-              rightValue=owner.getCurrentGame().getGainsNeededToEndGame();
-              break;
-          case countTurns:
-              rightValue=owner.getTurns();
-              break;
-          case isActionPhase:
-              rightValue=owner.isInBuyPhase()?0:1;
-              break;
-          case countBuysLeft:
-              rightValue=owner.buysLeft;
-              break;
-          case getTotalMoney:
-              rightValue=owner.getTotalMoneyInDeck();
-              break;
-          case getTotalMoneyExcludingNativeVillage:
-            rightValue=owner.getTotalMoneyExcludingNativeVillage();
-            break;
-          case countVP:
-              rightValue=owner.countVictoryPoints();
-              break;
-          case countMAXOpponentVP:
-              rightValue=owner.countMaxOpponentsVictoryPoints();
-              break;
-          case countCardsLeftInDrawDeck:
-              rightValue=owner.getDeck().getDrawDeckSize();
-              break;
-          case countEmptyPiles:
-              rightValue=owner.getCurrentGame().countEmptyPiles();
-              break;
-          case countCardsLeftInSmallestPile:
-              rightValue=owner.getCurrentGame().countCardsInSmallestPile();
-              break;
-          case countCardsInOpponentsDecks:
-        	  rightValue=0;
-        	  for (DomPlayer player : owner.getOpponents())
-        		 rightValue+=player.countInDeck(rightCardName);
-              break;
-		}
-		double theRightValue=rightValue;
-		switch(extraOperator) {
-		  case plus:
-			theRightValue = rightValue+extraAttribute;
+		case countCardsInSupply:
+			left.setValue(owner.getCurrentGame().countInSupply(
+					left.getCardName()));
 			break;
-		  case minus:
-	  	    theRightValue = rightValue-extraAttribute;
+		case countCardsInPlay:
+			left.setValue(owner.getCardsFromPlay(left.getCardName()).size());
 			break;
-		  case multiplyWith:
-			theRightValue = rightValue*extraAttribute;
+		case countCardsInHand:
+			left.setValue(owner.getCardsFromHand(left.getCardName()).size());
 			break;
-		  case divideBy:
-			theRightValue = rightValue/extraAttribute;
+		case countAllCardsInDeck:
+			left.setValue(owner.countAllCards());
+			break;
+		case countAvailableMoney:
+			left.setValue(owner.getAvailableCoins());
+			break;
+		case countTurns:
+			left.setValue(owner.getTurns());
+			break;
+		case gainsNeededToEndGame:
+			left.setValue(owner.getCurrentGame().getGainsNeededToEndGame());
+			break;
+		case isActionPhase:
+			left.setValue(owner.isInBuyPhase() ? 0 : 1);
+			break;
+		case countBuysLeft:
+			left.setValue(owner.buysLeft);
+			break;
+		case getTotalMoney:
+			left.setValue(owner.getTotalMoneyInDeck());
+			break;
+		case getTotalMoneyExcludingNativeVillage:
+			left.setValue(owner.getTotalMoneyExcludingNativeVillage());
+			break;
+		case countVP:
+			left.setValue(owner.countVictoryPoints());
+			break;
+		case countMAXOpponentVP:
+			left.setValue(owner.countMaxOpponentsVictoryPoints());
+			break;
+		case countCardsLeftInDrawDeck:
+			left.setValue(owner.getDeck().getDrawDeckSize());
+			break;
+		case countEmptyPiles:
+			left.setValue(owner.getCurrentGame().countEmptyPiles());
+			break;
+		case countCardsLeftInSmallestPile:
+			left.setValue(owner.getCurrentGame().countCardsInSmallestPile());
+			break;
+		case countCardsInOpponentsDecks:
+			left.setValue(0);
+			for (DomPlayer player : owner.getOpponents())
+				left.setValue(left.getValue()
+						+ player.countInDeck(left.getCardName()));
 			break;
 		}
-		switch(comparator){
-		  case equalTo:
-			  return leftValue==theRightValue;
-		  case smallerOrEqualThan:
-			  return leftValue<=theRightValue;
-		  case smallerThan:
-			  return leftValue<theRightValue;
-		  case greaterOrEqualThan:
-			  return leftValue>=theRightValue;
-		  case greaterThan:
-			  return leftValue>theRightValue;
+		switch (right.getFunction()) {
+		case countCardsInDeck:
+			right.setValue(owner.countInDeck(right.getCardName()));
+			break;
+		case countCardTypeInDeck:
+			right.setValue(owner.count(right.getCardType()));
+			break;
+		case countCardsInSupply:
+			right.setValue(owner.getCurrentGame().countInSupply(
+					right.getCardName()));
+			break;
+		case countCardsInHand:
+			right.setValue(owner.getCardsFromHand(right.getCardName()).size());
+			break;
+		case countCardsInPlay:
+			right.setValue(owner.getCardsFromPlay(right.getCardName()).size());
+			break;
+		case countAllCardsInDeck:
+			right.setValue(owner.countAllCards());
+			break;
+		case countAvailableMoney:
+			right.setValue(owner.getAvailableCoins());
+			break;
+		case gainsNeededToEndGame:
+			right.setValue(owner.getCurrentGame().getGainsNeededToEndGame());
+			break;
+		case countTurns:
+			right.setValue(owner.getTurns());
+			break;
+		case isActionPhase:
+			right.setValue(owner.isInBuyPhase() ? 0 : 1);
+			break;
+		case countBuysLeft:
+			right.setValue(owner.buysLeft);
+			break;
+		case getTotalMoney:
+			right.setValue(owner.getTotalMoneyInDeck());
+			break;
+		case getTotalMoneyExcludingNativeVillage:
+			right.setValue(owner.getTotalMoneyExcludingNativeVillage());
+			break;
+		case countVP:
+			right.setValue(owner.countVictoryPoints());
+			break;
+		case countMAXOpponentVP:
+			right.setValue(owner.countMaxOpponentsVictoryPoints());
+			break;
+		case countCardsLeftInDrawDeck:
+			right.setValue(owner.getDeck().getDrawDeckSize());
+			break;
+		case countEmptyPiles:
+			right.setValue(owner.getCurrentGame().countEmptyPiles());
+			break;
+		case countCardsLeftInSmallestPile:
+			right.setValue(owner.getCurrentGame().countCardsInSmallestPile());
+			break;
+		case countCardsInOpponentsDecks:
+			right.setValue(0);
+			for (DomPlayer player : owner.getOpponents())
+				right.setValue(right.getValue()
+						+ player.countInDeck(right.getCardName()));
+			break;
 		}
-		
+		double theRightValue = right.getValue();
+		switch (extraOperator) {
+		case plus:
+			theRightValue = right.getValue() + extraAttribute;
+			break;
+		case minus:
+			theRightValue = right.getValue() - extraAttribute;
+			break;
+		case multiplyWith:
+			theRightValue = right.getValue() * extraAttribute;
+			break;
+		case divideBy:
+			theRightValue = right.getValue() / extraAttribute;
+			break;
+		}
+		switch (comparator) {
+		case equalTo:
+			return left.getValue() == theRightValue;
+		case smallerOrEqualThan:
+			return left.getValue() <= theRightValue;
+		case smallerThan:
+			return left.getValue() < theRightValue;
+		case greaterOrEqualThan:
+			return left.getValue() >= theRightValue;
+		case greaterThan:
+			return left.getValue() > theRightValue;
+		}
+
 		return false;
 	}
 
 	public void addRightHand(String aType, String anAttribute) {
-	   rightFunction=DomBotFunction.valueOf(aType);
-       if (anAttribute==null)
-           return;
-       if (rightFunction==DomBotFunction.constant) {
-	     rightValue=Double.valueOf(anAttribute).doubleValue();
-	     return;
-	   } 
-       if (rightFunction==DomBotFunction.countCardTypeInDeck) {
-         rightCardType=DomCardType.valueOf(anAttribute);
-         return;
-       }
-       rightCardName=DomCardName.valueOf(anAttribute);
+		right.setFunction(DomBotFunction.valueOf(aType));
+		if (anAttribute == null)
+			return;
+		if (right.getFunction() == DomBotFunction.constant) {
+			right.setValue(Double.valueOf(anAttribute).doubleValue());
+			return;
+		}
+		if (right.getFunction() == DomBotFunction.countCardTypeInDeck) {
+			right.setCardType(DomCardType.valueOf(anAttribute));
+			return;
+		}
+		right.setCardName(DomCardName.valueOf(anAttribute));
 	}
 
 	public void addLeftHand(String aType, String anAttribute) {
-       leftFunction=DomBotFunction.valueOf(aType);
-       if (anAttribute==null)
-           return;
-       if (leftFunction==DomBotFunction.constant) {
-         leftValue=Double.valueOf(anAttribute).doubleValue();
-         return;
-       } 
-       if (leftFunction==DomBotFunction.countCardTypeInDeck) {
-         leftCardType=DomCardType.valueOf(anAttribute);
-         return;
-       }
-       leftCardName=DomCardName.valueOf(anAttribute);
-    }
-
-	public void addComparator(String aComparator) {
-       comparator=DomBotComparator.valueOf(aComparator);	
+		left.setFunction(DomBotFunction.valueOf(aType));
+		if (anAttribute == null)
+			return;
+		if (left.getFunction() == DomBotFunction.constant) {
+			left.setValue(Double.valueOf(anAttribute).doubleValue());
+			return;
+		}
+		if (left.getFunction() == DomBotFunction.countCardTypeInDeck) {
+			left.setCardType(DomCardType.valueOf(anAttribute));
+			return;
+		}
+		left.setCardName(DomCardName.valueOf(anAttribute));
 	}
 
-    /**
-     * @param aResolveAttrib
-     * @param aResolveAttrib2
-     */
-    public void addExtraOperation( String aType, String anAttribute ) {
-        extraOperator=DomBotOperator.valueOf(aType);   
-        extraAttribute=Double.valueOf(anAttribute).doubleValue();   
-    }
+	public void addComparator(String aComparator) {
+		comparator = DomBotComparator.valueOf(aComparator);
+	}
 
-    public DomBotFunction getLeftFunction() {
-		return leftFunction;
+	/**
+	 * @param aResolveAttrib
+	 * @param aResolveAttrib2
+	 */
+	public void addExtraOperation(String aType, String anAttribute) {
+		extraOperator = DomBotOperator.valueOf(aType);
+		extraAttribute = Double.valueOf(anAttribute).doubleValue();
+	}
+
+	public DomBotFunction getLeftFunction() {
+		return left.getFunction();
 	}
 
 	public void setLeftFunction(DomBotFunction leftFunction) {
-		this.leftFunction = leftFunction;
+		this.left.setFunction(leftFunction);
 	}
 
 	public double getLeftValue() {
-		return leftValue;
+		return left.getValue();
 	}
 
 	public void setLeftValue(double leftValue) {
-		this.leftValue = leftValue;
+		this.left.setValue(leftValue);
 	}
 
 	public DomCardName getLeftCardName() {
-		return leftCardName;
+		return left.getCardName();
 	}
 
 	public void setLeftCardName(DomCardName leftCardName) {
-		this.leftCardName = leftCardName;
+		this.left.setCardName(leftCardName);
 	}
 
 	public DomBotComparator getComparator() {
@@ -283,27 +276,27 @@ public class DomBuyCondition {
 	}
 
 	public DomBotFunction getRightFunction() {
-		return rightFunction;
+		return right.getFunction();
 	}
 
 	public void setRightFunction(DomBotFunction rightFunction) {
-		this.rightFunction = rightFunction;
+		this.right.setFunction(rightFunction);
 	}
 
 	public double getRightValue() {
-		return rightValue;
+		return right.getValue();
 	}
 
 	public void setRightValue(double rightValue) {
-		this.rightValue = rightValue;
+		this.right.setValue(rightValue);
 	}
 
 	public DomCardName getRightCardName() {
-		return rightCardName;
+		return right.getCardName();
 	}
 
 	public void setRightCardName(DomCardName rightCardName) {
-		this.rightCardName = rightCardName;
+		this.right.setCardName(rightCardName);
 	}
 
 	public DomBotOperator getExtraOperator() {
@@ -323,76 +316,106 @@ public class DomBuyCondition {
 	}
 
 	public DomCardType getRightCardType() {
-		return rightCardType;
+		return right.getCardType();
 	}
 
 	public void setRightCardType(DomCardType rightCardType) {
-		this.rightCardType = rightCardType;
+		this.right.setCardType(rightCardType);
 	}
 
 	public DomCardType getLeftCardType() {
-		return leftCardType;
+		return left.getCardType();
 	}
 
 	public void setLeftCardType(DomCardType leftCardType) {
-		this.leftCardType = leftCardType;
+		this.left.setCardType(leftCardType);
+	}
+
+	public Operand getLeft() {
+		return left;
+	}
+
+	public void setLeft(Operand left) {
+		this.left = left;
+	}
+
+	public Operand getRight() {
+		return right;
+	}
+
+	public void setRight(Operand right) {
+		this.right = right;
 	}
 
 	/**
-     * @param domBuyRulePanel 
-     * @return
-     */
-    public DomBuyConditionPanel getGuiPanel(DomBuyRulePanel domBuyRulePanel) {
-        return new DomBuyConditionPanel(this, domBuyRulePanel);
-    }
+	 * @param domBuyRulePanel
+	 * @return
+	 */
+	public DomBuyConditionPanel getGuiPanel(DomBuyRulePanel domBuyRulePanel) {
+		return new DomBuyConditionPanel(this, domBuyRulePanel);
+	}
 
 	public String getXML(String theRuleIndentation) {
-        StringBuilder theXML = new StringBuilder();
-        String newline = System.getProperty( "line.separator" );
-        String theIndentation = "   ";
-        theXML.append(theRuleIndentation).append(theIndentation);
-        theXML.append("<condition>").append(newline);
-        theXML.append(theRuleIndentation).append(theIndentation).append(theIndentation);
-        theXML.append("<left type=\"").append(leftFunction.name()).append("\"");
-        if (leftFunction==DomBotFunction.constant) {
-          theXML.append(" attribute=\"").append(leftValue).append("\"");
-        } 
-        if (leftFunction==DomBotFunction.countCardTypeInDeck) {
-          theXML.append(" attribute=\"").append(leftCardType.name()).append("\"");
-        }
-        if (leftFunction==DomBotFunction.countCardsInDeck
-                || leftFunction==DomBotFunction.countCardsInSupply
-                || leftFunction==DomBotFunction.countCardsInOpponentsDecks
-                || leftFunction==DomBotFunction.countCardsInHand
-            || leftFunction==DomBotFunction.countCardsInPlay) {
-          theXML.append(" attribute=\"").append(leftCardName.name()).append("\"");
-        }
-        theXML.append("/>").append(newline);
-        theXML.append(theRuleIndentation).append(theIndentation).append(theIndentation);
-        theXML.append("<operator type=\"").append(comparator.name()).append("\" />").append(newline);
-        theXML.append(theRuleIndentation).append(theIndentation).append(theIndentation);
-        theXML.append("<right type=\"").append(rightFunction.name()).append("\"");
-        if (rightFunction==DomBotFunction.constant) {
-          theXML.append(" attribute=\"").append(rightValue).append("\"");
-        } 
-        if (rightFunction==DomBotFunction.countCardTypeInDeck) {
-          theXML.append(" attribute=\"").append(rightCardType.name()).append("\"");
-        }
-        if (rightFunction==DomBotFunction.countCardsInDeck
-         || rightFunction==DomBotFunction.countCardsInSupply
-         || rightFunction==DomBotFunction.countCardsInOpponentsDecks
-         || rightFunction==DomBotFunction.countCardsInHand
-         || rightFunction==DomBotFunction.countCardsInPlay) {
-          theXML.append(" attribute=\"").append(rightCardName.name()).append("\"");
-        }
-        theXML.append("/>").append(newline);
-        if (extraAttribute!=0) {
-          theXML.append(theRuleIndentation).append(theIndentation).append(theIndentation);
-          theXML.append("<extra_operation type=\"").append(extraOperator.name()).append("\"");
-          theXML.append(" attribute=\"").append(extraAttribute).append("\" />").append(newline);
-        }
-        theXML.append(theRuleIndentation).append(theIndentation);
-        theXML.append("</condition>").append(newline);
+		StringBuilder theXML = new StringBuilder();
+		String newline = System.getProperty("line.separator");
+		String theIndentation = "   ";
+		theXML.append(theRuleIndentation).append(theIndentation);
+		theXML.append("<condition>").append(newline);
+		theXML.append(theRuleIndentation).append(theIndentation)
+				.append(theIndentation);
+		theXML.append("<left type=\"").append(left.getFunction().name())
+				.append("\"");
+		if (left.getFunction() == DomBotFunction.constant) {
+			theXML.append(" attribute=\"").append(left.getValue()).append("\"");
+		}
+		if (left.getFunction() == DomBotFunction.countCardTypeInDeck) {
+			theXML.append(" attribute=\"").append(left.getCardType().name())
+					.append("\"");
+		}
+		if (left.getFunction() == DomBotFunction.countCardsInDeck
+				|| left.getFunction() == DomBotFunction.countCardsInSupply
+				|| left.getFunction() == DomBotFunction.countCardsInOpponentsDecks
+				|| left.getFunction() == DomBotFunction.countCardsInHand
+				|| left.getFunction() == DomBotFunction.countCardsInPlay) {
+			theXML.append(" attribute=\"").append(left.getCardName().name())
+					.append("\"");
+		}
+		theXML.append("/>").append(newline);
+		theXML.append(theRuleIndentation).append(theIndentation)
+				.append(theIndentation);
+		theXML.append("<operator type=\"").append(comparator.name())
+				.append("\" />").append(newline);
+		theXML.append(theRuleIndentation).append(theIndentation)
+				.append(theIndentation);
+		theXML.append("<right type=\"").append(right.getFunction().name())
+				.append("\"");
+		if (right.getFunction() == DomBotFunction.constant) {
+			theXML.append(" attribute=\"").append(right.getValue())
+					.append("\"");
+		}
+		if (right.getFunction() == DomBotFunction.countCardTypeInDeck) {
+			theXML.append(" attribute=\"").append(right.getCardType().name())
+					.append("\"");
+		}
+		if (right.getFunction() == DomBotFunction.countCardsInDeck
+				|| right.getFunction() == DomBotFunction.countCardsInSupply
+				|| right.getFunction() == DomBotFunction.countCardsInOpponentsDecks
+				|| right.getFunction() == DomBotFunction.countCardsInHand
+				|| right.getFunction() == DomBotFunction.countCardsInPlay) {
+			theXML.append(" attribute=\"").append(right.getCardName().name())
+					.append("\"");
+		}
+		theXML.append("/>").append(newline);
+		if (extraAttribute != 0) {
+			theXML.append(theRuleIndentation).append(theIndentation)
+					.append(theIndentation);
+			theXML.append("<extra_operation type=\"")
+					.append(extraOperator.name()).append("\"");
+			theXML.append(" attribute=\"").append(extraAttribute)
+					.append("\" />").append(newline);
+		}
+		theXML.append(theRuleIndentation).append(theIndentation);
+		theXML.append("</condition>").append(newline);
 		return theXML.toString();
 	}
 }
