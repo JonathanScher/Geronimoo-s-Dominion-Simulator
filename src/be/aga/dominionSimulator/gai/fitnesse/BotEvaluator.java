@@ -25,12 +25,14 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 		DomPlayer candidatePlayer = new DomPlayer("candidate");
 		candidatePlayer.addBuyRules(candidate);
 		List<DomPlayer> players = new ArrayList<DomPlayer>();
+		players.add(candidatePlayer);
+		players.add(opponentPlayer);
 		List<Double> ratio = new ArrayList<>();
 		
 		for (int i = 0; i < GAMES_REQUIRED_FOR_GOOD_AVERAGE; i++) {
 			DomGame theGame = new DomGame(null, players);
 			theGame.run();
-			ratio.add(Double.valueOf(opponentPlayer.countVictoryPoints())
+			ratio.add(Double.valueOf(candidatePlayer.countVictoryPoints())
 					/ Double.valueOf(opponentPlayer.countVictoryPoints()));
 			theGame.getBoard().reset();
 		}

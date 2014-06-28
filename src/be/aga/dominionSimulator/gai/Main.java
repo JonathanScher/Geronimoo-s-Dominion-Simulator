@@ -1,23 +1,26 @@
 package be.aga.dominionSimulator.gai;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.jfree.data.statistics.MeanAndStandardDeviation;
+import org.uncommons.maths.random.MersenneTwisterRNG;
 
-import be.aga.dominionSimulator.DomBoard;
 import be.aga.dominionSimulator.DomBuyRule;
-import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomGame;
 import be.aga.dominionSimulator.DomPlayer;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.gai.factory.BuyRuleListFactory;
 
+@SuppressWarnings("unused")
 public class Main {
 
 	public static void main(String[] args) {
+		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+		geneticAlgorithm.runGeneticAlgorithm();
+	}
+
+	private static void runGames() {
 		List<DomPlayer> players = new ArrayList<>();
 		DomPlayer player1 = createRandomPlayer();
 		players.add(player1);
