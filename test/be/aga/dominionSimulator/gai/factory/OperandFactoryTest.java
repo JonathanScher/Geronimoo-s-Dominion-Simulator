@@ -34,7 +34,7 @@ public class OperandFactoryTest {
 		when(factory.functionFactory.generateRandomBotFunction(rand))
 				.thenReturn(DomBotFunction.constant);
 		// W
-		Operand generated = factory.generateRandomOperand(rand);
+		Operand generated = factory.generateRandomOperand(rand, false);
 
 		// T
 		assertEquals(DomBotFunction.constant, generated.getFunction());
@@ -48,7 +48,7 @@ public class OperandFactoryTest {
 		when(factory.cardTypeFactory.generateRandomCardType(rand)).thenReturn(
 				DomCardType.Action);
 		// W
-		Operand generated = factory.generateRandomOperand(rand);
+		Operand generated = factory.generateRandomOperand(rand, false);
 
 		// T
 		assertEquals(DomCardType.Action, generated.getCardType());
@@ -61,7 +61,7 @@ public class OperandFactoryTest {
 				.thenReturn(DomBotFunction.constant);
 		when(rand.nextInt(12)).thenReturn(3);
 		// W
-		Operand generated = factory.generateRandomOperand(rand);
+		Operand generated = factory.generateRandomOperand(rand, false);
 
 		// T
 		assertEquals(Double.valueOf(3), Double.valueOf(generated.getValue()));
@@ -108,7 +108,7 @@ public class OperandFactoryTest {
 		when(factory.cardNameFactory.generateRandomCardName(rand)).thenReturn(
 				DomCardName.Adventurer);
 		// W
-		Operand generated = factory.generateRandomOperand(rand);
+		Operand generated = factory.generateRandomOperand(rand, false);
 
 		// T
 		assertEquals(DomCardName.Adventurer, generated.getCardName());

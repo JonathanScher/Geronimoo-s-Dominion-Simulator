@@ -8,7 +8,8 @@ import be.aga.dominionSimulator.enums.DomBotFunction;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class OperandFactory {
-	//TODO tweak the max constant to change depending on the left hand operand's type
+	// TODO tweak the max constant to change depending on the left hand
+	// operand's type
 	private static final int MAX_CONSTANT_NUMBER = 12;
 	protected BotFunctionFactory functionFactory = BotFunctionFactory.INSTANCE;
 	protected CardNameFactory cardNameFactory;
@@ -18,10 +19,17 @@ public class OperandFactory {
 		cardNameFactory = new CardNameFactory(deck);
 	}
 
-	public Operand generateRandomOperand(Random rand) {
+	// TODO generate RightOperand: Higher chance to get a constant, and no
+	// isActionPhase
+	public Operand generateRandomOperand(Random rand, boolean isRightHand) {
 		Operand operand = new Operand();
-		DomBotFunction function = functionFactory
-				.generateRandomBotFunction(rand);
+		DomBotFunction function;
+
+		if (isRightHand) {
+			function = functionFactory.generateRightBotFunction(rand);
+		} else {
+			function = functionFactory.generateRandomBotFunction(rand);
+		}
 		operand.setFunction(function);
 
 		if (DomBotFunction.countCardTypeInDeck.equals(function)) {
@@ -32,7 +40,7 @@ public class OperandFactory {
 				|| DomBotFunction.countCardsInPlay.equals(function)
 				|| DomBotFunction.countCardsInOpponentsDecks.equals(function)) {
 			operand.setCardName(cardNameFactory.generateRandomCardName(rand));
-		} else if (DomBotFunction.constant.equals(function)){
+		} else if (DomBotFunction.constant.equals(function)) {
 			operand.setValue(rand.nextInt(MAX_CONSTANT_NUMBER));
 		}
 

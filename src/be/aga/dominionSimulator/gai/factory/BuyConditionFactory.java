@@ -20,15 +20,13 @@ public class BuyConditionFactory {
 
 	public DomBuyCondition generateRandomBuyCondition(Random rand) {
 		DomBuyCondition condition = new DomBuyCondition();
-		condition.setLeft(operandFactory.generateRandomOperand(rand));
+		condition.setLeft(operandFactory.generateRandomOperand(rand, false));
 
 		// TODO handle more special cases and more special values
 		if (!condition.getLeftFunction().equals(DomBotFunction.isActionPhase)) {
 			condition.setComparator(botComparatorFactory
 					.generateRandomDomBotComparator(rand));
-			// TODO Should that stay a pure random operand or can we get smarter
-			// about this?
-			condition.setRight(operandFactory.generateRandomOperand(rand));
+			condition.setRight(operandFactory.generateRandomOperand(rand, true));
 		} else {
 			Operand right = new Operand();
 			right.setFunction(DomBotFunction.constant);
