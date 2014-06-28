@@ -16,9 +16,9 @@ public class BuyRuleListFactory extends
 	BuyConditionFactory buyConditionFactory;
 	CardNameFactory cardNameFactory;
 
-	public BuyRuleListFactory(List<DomCardName> deck) {
-		buyConditionFactory = new BuyConditionFactory(deck);
-		cardNameFactory = new CardNameFactory(deck);
+	public BuyRuleListFactory(List<DomCardName> realm) {
+		buyConditionFactory = new BuyConditionFactory(realm);
+		cardNameFactory = new CardNameFactory(realm);
 	}
 
 	@Override
@@ -26,13 +26,17 @@ public class BuyRuleListFactory extends
 		List<DomBuyRule> buyRules = new ArrayList<DomBuyRule>();
 		Integer maxSize = rng.nextInt(MAX_GENOME_SIZE);
 		for (int i = 0; i < maxSize; i++) {
-			DomBuyRule rule = new DomBuyRule(
-					cardNameFactory.generateRandomCardName(new Random(System
-							.currentTimeMillis())));
-			rule.addCondition(buyConditionFactory
-					.generateRandomBuyCondition(rng));
-			buyRules.add(rule);
+			buyRules.add(generateGene(rng));
 		}
 		return buyRules;
+	}
+
+	public DomBuyRule generateGene(Random rng) {
+		DomBuyRule rule = new DomBuyRule(
+				cardNameFactory.generateRandomCardName(new Random(System
+						.currentTimeMillis())));
+		rule.addCondition(buyConditionFactory
+				.generateRandomBuyCondition(rng));
+		return rule;
 	}
 }

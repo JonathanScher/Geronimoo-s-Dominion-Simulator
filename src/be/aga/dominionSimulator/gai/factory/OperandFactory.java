@@ -15,8 +15,8 @@ public class OperandFactory {
 	protected CardNameFactory cardNameFactory;
 	protected CardTypeFactory cardTypeFactory = CardTypeFactory.INSTANCE;
 
-	public OperandFactory(List<DomCardName> deck) {
-		cardNameFactory = new CardNameFactory(deck);
+	public OperandFactory(List<DomCardName> realm) {
+		cardNameFactory = new CardNameFactory(realm);
 	}
 
 	// TODO generate RightOperand: Higher chance to get a constant, and no

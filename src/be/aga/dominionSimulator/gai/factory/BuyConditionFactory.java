@@ -14,8 +14,8 @@ public class BuyConditionFactory {
 	BotComparatorFactory botComparatorFactory = BotComparatorFactory.INSTANCE;
 	OperandFactory operandFactory;
 
-	public BuyConditionFactory(List<DomCardName> deck) {
-		operandFactory = new OperandFactory(deck);
+	public BuyConditionFactory(List<DomCardName> realm) {
+		operandFactory = new OperandFactory(realm);
 	}
 
 	public DomBuyCondition generateRandomBuyCondition(Random rand) {
