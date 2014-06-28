@@ -11,6 +11,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -208,7 +209,7 @@ public class DomEngine {
      * @param aNumber 
      * @param aShowLog 
      */
-    public void startSimulation( ArrayList<DomPlayer> thePlayers, boolean keepOrder, int aNumber, boolean aShowLog ) {
+    public void startSimulation( List<DomPlayer> thePlayers, boolean keepOrder, int aNumber, boolean aShowLog ) {
         emptyPilesEndingCount=0;
         NUMBER_OF_GAMES = aNumber;
         myLog="<BR><HR><B>Game Log</B><BR>";
@@ -221,7 +222,7 @@ public class DomEngine {
               Collections.shuffle(players);
             }
             haveToLog=false;
-            DomGame theGame = new DomGame(theBoard, players, null );
+            DomGame theGame = new DomGame(theBoard, players);
             haveToLog=aShowLog;
             theGame.run();
             if (DomEngine.haveToLog) {

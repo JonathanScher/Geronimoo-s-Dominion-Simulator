@@ -1467,7 +1467,10 @@ public class DomPlayer implements Comparable<DomPlayer> {
 			buyRules.add(buyRule);
 		}
 	}
-
+	public void addBuyRules(List<DomBuyRule> buyRules) {
+		buyRules.forEach(x->addBuyRule(x));
+	}
+		
 	public DomPlayer getCopy(String aName) {
 		DomPlayer theCopy = new DomPlayer(aName);
 		theCopy.buyRules = new ArrayList<>(buyRules);
