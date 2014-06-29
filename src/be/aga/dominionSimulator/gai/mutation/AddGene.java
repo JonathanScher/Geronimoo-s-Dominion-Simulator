@@ -18,10 +18,13 @@ public class AddGene extends AbstractMutation {
 		ruleListFactory = new BuyRuleListFactory(realm);
 	}
 
-
 	public void mutate(List<DomBuyRule> element, Random rng) {
 		DomBuyRule gene = ruleListFactory.generateGene(rng);
-		element.add(rng.nextInt(element.size()), gene);
+		Integer position = 0;
+		if (element.size() > 1) {
+			position = rng.nextInt(element.size());
+		}
+		element.add(position, gene);
 	}
 
 }

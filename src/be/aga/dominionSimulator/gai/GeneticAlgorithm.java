@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JFrame;
+
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
+import org.uncommons.watchmaker.framework.CachingFitnessEvaluator;
 import org.uncommons.watchmaker.framework.CandidateFactory;
 import org.uncommons.watchmaker.framework.EvolutionEngine;
 import org.uncommons.watchmaker.framework.EvolutionObserver;
@@ -14,9 +17,11 @@ import org.uncommons.watchmaker.framework.FitnessEvaluator;
 import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
 import org.uncommons.watchmaker.framework.PopulationData;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
+import org.uncommons.watchmaker.framework.TerminationCondition;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.operators.ListCrossover;
 import org.uncommons.watchmaker.framework.termination.TargetFitness;
+import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
 
 import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomPlayer;
@@ -31,8 +36,8 @@ import be.aga.dominionSimulator.gai.selection.BotTournamentSelection;
 
 public class GeneticAlgorithm {
 
-	private static final double TARGET_FITNESSE = 1.3;
-	private static final int INITIAL_POPULATION_SIZE = 10;
+	private static final double TARGET_FITNESSE = 85;
+	private static final int INITIAL_POPULATION_SIZE = 20;
 	private static final double TOURNAMENT_PRESSURE = 0.9;
 
 	public GeneticAlgorithm() {
@@ -58,25 +63,39 @@ public class GeneticAlgorithm {
 		SelectionStrategy<List<DomBuyRule>> selectionStrategy = new BotTournamentSelection(
 				prob);
 		Random rng = new MersenneTwisterRNG();
-
+		FitnessEvaluator<List<DomBuyRule>> cachedFE = new CachingFitnessEvaluator<>(
+				fitnessEvaluator);
 		EvolutionEngine<List<DomBuyRule>> engine = new GenerationalEvolutionEngine<>(
-				candidateFactory, evolutionScheme, fitnessEvaluator,
+				candidateFactory, evolutionScheme, cachedFE,
 				selectionStrategy, rng);
-		
-		engine.addEvolutionObserver(new EvolutionObserver<List<DomBuyRule>>()
-				{
-				    public void populationUpdate(PopulationData<? extends List<DomBuyRule>> data)
-				    {
-				        System.out.printf("Generation %d: %s\n",
-				                          data.getGenerationNumber(),
-				                          data.getBestCandidate());
-				    }
-				});
-		
-		List<DomBuyRule> result = engine.evolve(INITIAL_POPULATION_SIZE, 0, new TargetFitness(TARGET_FITNESSE, true));
+		List<Double> fitnesses = new ArrayList<>();
+		EvolutionMonitor<List<DomBuyRule>> evolutionMonitor = new EvolutionMonitor<>();
+		engine.addEvolutionObserver(evolutionMonitor);
+		JFrame frame = new JFrame();
+		frame.add(evolutionMonitor.getGUIComponent());
+		frame.setVisible(true);
+		engine.addEvolutionObserver(new EvolutionObserver<List<DomBuyRule>>() {
+			public void populationUpdate(
+					PopulationData<? extends List<DomBuyRule>> data) {
+				fitnesses.add(data.getBestCandidateFitness());
+				if (data.getGenerationNumber() % 10 == 0)
+					System.out.printf("Generation %d: ( %s ) %s\n", data
+							.getGenerationNumber(),
+							Double.valueOf(data.getBestCandidateFitness())
+									.toString(), data.getBestCandidate());
+			}
+		});
+
+		TerminationCondition targetCondition = new TargetFitness(
+				TARGET_FITNESSE, true);
+		// targetCondition = new GenerationCount(2000);
+
+		List<DomBuyRule> result = engine.evolve(INITIAL_POPULATION_SIZE, 4,
+				targetCondition);
 		DomPlayer toXML = new DomPlayer("solution");
 		toXML.addBuyRules(result);
 		System.out.println(toXML.getXML());
+		System.out.println(fitnesses);
 	}
 
 	public List<DomBuyRule> getBigMoney() {
@@ -99,4 +118,10 @@ public class GeneticAlgorithm {
 		return realm;
 
 	}
+
+	public static void main(String[] args) {
+		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+		geneticAlgorithm.runGeneticAlgorithm();
+	}
+
 }
