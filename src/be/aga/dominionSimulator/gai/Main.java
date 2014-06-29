@@ -7,15 +7,75 @@ import java.util.Random;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 
 import be.aga.dominionSimulator.DomBuyRule;
+import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomGame;
 import be.aga.dominionSimulator.DomPlayer;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.gai.factory.BuyRuleListFactory;
+import be.aga.dominionSimulator.gai.fitnesse.BotEvaluator;
 
 @SuppressWarnings("unused")
 public class Main {
 
 	public static void main(String[] args) {
+		runGAI();
+//		runBotEvaluatorWithTwoBigMoney();
+//		runBotEvaluatorWithOneEstateBuyerAndOneBM();
+//		runEngineWithTwoBigMoney();
+	}
+
+	private static void runBotEvaluatorWithOneEstateBuyerAndOneBM() {
+		BuyStrategy bigMoney = generateBigMoneyStrategy();
+
+		BuyStrategy buyEstate = new BuyStrategy();
+		buyEstate.add(new DomBuyRule(DomCardName.Estate));
+		BotEvaluator evaluator = new BotEvaluator(bigMoney);
+		List<Double> fitnesses = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			Double fitness = evaluator.getFitness(buyEstate, null);
+			fitnesses.add(fitness);
+			System.out.println(fitness);
+		}
+		
+	}
+
+	private static void runEngineWithTwoBigMoney() {
+		DomEngine engine = new DomEngine();
+		List<DomPlayer> players = new ArrayList<DomPlayer>();
+		DomPlayer player1 = new DomPlayer("player1");
+		player1.addBuyRules(generateBigMoneyStrategy());
+		players.add(player1);
+		
+		DomPlayer player2 = new DomPlayer("player2");
+		player2.addBuyRules(generateBigMoneyStrategy());
+		players.add(player2);
+		
+		engine.startSimulation(players, false, 1000, false);
+	}
+
+	private static void runBotEvaluatorWithTwoBigMoney() {
+		BuyStrategy bigMoney = generateBigMoneyStrategy();
+
+		BuyStrategy bigMoney2 = new BuyStrategy(bigMoney);
+		BotEvaluator evaluator = new BotEvaluator(bigMoney);
+		List<Double> fitnesses = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			Double fitness = evaluator.getFitness(bigMoney2, null);
+			fitnesses.add(fitness);
+			System.out.println(fitness);
+		}
+
+	}
+
+	public static BuyStrategy generateBigMoneyStrategy() {
+		BuyStrategy bigMoney = new BuyStrategy();
+		bigMoney.add(new DomBuyRule(DomCardName.Province));
+		bigMoney.add(new DomBuyRule(DomCardName.Gold));
+		bigMoney.add(new DomBuyRule(DomCardName.Silver));
+		return bigMoney;
+	}
+
+	public static void runGAI() {
 		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 		geneticAlgorithm.runGeneticAlgorithm();
 	}

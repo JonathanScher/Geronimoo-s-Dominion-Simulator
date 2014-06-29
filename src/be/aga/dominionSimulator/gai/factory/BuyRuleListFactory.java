@@ -8,6 +8,7 @@ import org.uncommons.watchmaker.framework.factories.AbstractCandidateFactory;
 
 import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.enums.DomCardName;
+import be.aga.dominionSimulator.gai.BuyStrategy;
 
 public class BuyRuleListFactory extends
 		AbstractCandidateFactory<List<DomBuyRule>> {
@@ -23,7 +24,7 @@ public class BuyRuleListFactory extends
 
 	@Override
 	public List<DomBuyRule> generateRandomCandidate(Random rng) {
-		List<DomBuyRule> buyRules = new ArrayList<DomBuyRule>();
+		BuyStrategy buyRules = new BuyStrategy();
 		Integer maxSize = rng.nextInt(MAX_GENOME_SIZE);
 		for (int i = 0; i < maxSize; i++) {
 			buyRules.add(generateGene(rng));

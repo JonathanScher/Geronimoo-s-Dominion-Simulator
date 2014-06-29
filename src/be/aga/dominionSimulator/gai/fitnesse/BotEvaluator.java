@@ -1,10 +1,12 @@
 package be.aga.dominionSimulator.gai.fitnesse;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
+import be.aga.dominionSimulator.DomBoard;
 import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomGame;
 import be.aga.dominionSimulator.DomPlayer;
@@ -28,26 +30,50 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 		List<DomPlayer> players = new ArrayList<DomPlayer>();
 		players.add(candidatePlayer);
 		players.add(opponentPlayer);
+
+		return startSimulation(players, false, GAMES_REQUIRED_FOR_GOOD_AVERAGE,
+				false);
+	}
+
+	public double startSimulation(List<DomPlayer> thePlayers,
+			boolean keepOrder, int aNumber, boolean aShowLog) {
+		Integer emptyPilesEndingCount;
+		Integer NUMBER_OF_GAMES;
+		List<DomPlayer> players = new ArrayList<>();
 		List<Double> ratio = new ArrayList<>();
-		Integer wins = 0;
+		DomPlayer candidatePlayer = thePlayers.get(0);
+		DomPlayer basePlayer = thePlayers.get(1);
+		emptyPilesEndingCount = 0;
 
-		for (int i = 0; i < GAMES_REQUIRED_FOR_GOOD_AVERAGE; i++) {
-			DomGame theGame = new DomGame(null, players);
-			theGame.run();
-			Integer candidateVictory = candidatePlayer.countVictoryPoints();
-			Integer opponentVictory = opponentPlayer.countVictoryPoints();
-			ratio.add(Double.valueOf(candidateVictory)
-					/ Double.valueOf(opponentVictory));
-
-			if (candidateVictory > opponentVictory) {
-				wins++;
+		NUMBER_OF_GAMES = aNumber;
+		players.clear();
+		players.addAll(thePlayers);
+		DomBoard theBoard = null;
+		for (int i = 0; i < NUMBER_OF_GAMES; i++) {
+			if (!keepOrder) {
+				Collections.shuffle(players);
 			}
-			theGame.getBoard().reset();
+			DomGame theGame = new DomGame(theBoard, players);
+			theGame.run();
+			emptyPilesEndingCount += theGame.emptyPilesEnding ? 1 : 0;
+			theGame.determineWinners();
+			ratio.add(Double.valueOf(candidatePlayer.countVictoryPoints())
+					/ Double.valueOf(basePlayer.countVictoryPoints()));
+			theBoard = theGame.getBoard();
+			theBoard.reset();
 		}
+		// restoring the player order:
+		players.clear();
+		players.addAll(thePlayers);
+		Double winPercentage = Double.valueOf(candidatePlayer.getWins())
+				/ NUMBER_OF_GAMES * 100;
 		Double ratioAverage = ratio.stream().mapToDouble(x -> x).average()
 				.getAsDouble();
-		Double winAverage = Double.valueOf(wins)/GAMES_REQUIRED_FOR_GOOD_AVERAGE;
-		return ratioAverage + 100 * winAverage;
+		if (winPercentage == 0) {
+			return ratioAverage;
+		} else {
+			return winPercentage;
+		}
 	}
 
 	@Override
