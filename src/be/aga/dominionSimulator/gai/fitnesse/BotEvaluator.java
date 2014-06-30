@@ -31,31 +31,26 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 		players.add(candidatePlayer);
 		players.add(opponentPlayer);
 
-		return startSimulation(players, false, GAMES_REQUIRED_FOR_GOOD_AVERAGE,
+		return startSimulation(players, false,
 				false);
 	}
 
 	public double startSimulation(List<DomPlayer> thePlayers,
-			boolean keepOrder, int aNumber, boolean aShowLog) {
-		Integer emptyPilesEndingCount;
-		Integer NUMBER_OF_GAMES;
+			boolean keepOrder, boolean aShowLog) {
 		List<DomPlayer> players = new ArrayList<>();
 		List<Double> ratio = new ArrayList<>();
 		DomPlayer candidatePlayer = thePlayers.get(0);
 		DomPlayer basePlayer = thePlayers.get(1);
-		emptyPilesEndingCount = 0;
 
-		NUMBER_OF_GAMES = aNumber;
 		players.clear();
 		players.addAll(thePlayers);
 		DomBoard theBoard = null;
-		for (int i = 0; i < NUMBER_OF_GAMES; i++) {
+		for (int i = 0; i < GAMES_REQUIRED_FOR_GOOD_AVERAGE; i++) {
 			if (!keepOrder) {
 				Collections.shuffle(players);
 			}
 			DomGame theGame = new DomGame(theBoard, players);
 			theGame.run();
-			emptyPilesEndingCount += theGame.emptyPilesEnding ? 1 : 0;
 			theGame.determineWinners();
 			ratio.add(Double.valueOf(candidatePlayer.countVictoryPoints())
 					/ Double.valueOf(basePlayer.countVictoryPoints()));
@@ -66,7 +61,7 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 		players.clear();
 		players.addAll(thePlayers);
 		Double winPercentage = Double.valueOf(candidatePlayer.getWins())
-				/ NUMBER_OF_GAMES * 100;
+				/ GAMES_REQUIRED_FOR_GOOD_AVERAGE * 100;
 		Double ratioAverage = ratio.stream().mapToDouble(x -> x).average()
 				.getAsDouble();
 		if (winPercentage == 0) {

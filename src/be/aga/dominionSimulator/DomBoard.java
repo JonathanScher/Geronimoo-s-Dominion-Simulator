@@ -160,8 +160,10 @@ public class DomBoard extends EnumMap< DomCardName, ArrayList<DomCard> > {
 
     public int countEmptyPiles() {
         int theEmptyPiles=0;
-        for (DomCardName theCardName : keySet()) {
-            theEmptyPiles+=get(theCardName).size()==0 ? 1 : 0 ;
+        for (Entry<DomCardName,  ArrayList<DomCard>> entry : entrySet()){
+        	if(entry.getValue().size() == 0) {
+        		theEmptyPiles++;
+        	}
         }
         return theEmptyPiles;
     }

@@ -36,9 +36,9 @@ import be.aga.dominionSimulator.gai.selection.BotTournamentSelection;
 
 public class GeneticAlgorithm {
 
-	private static final int ELITES = 10;
+	private static final int ELITES = 50;
 	private static final double TARGET_FITNESSE = 85;
-	private static final int INITIAL_POPULATION_SIZE = 20;
+	private static final int INITIAL_POPULATION_SIZE = 100;
 	private static final double TOURNAMENT_PRESSURE = 0.9;
 
 	public GeneticAlgorithm() {
@@ -64,7 +64,7 @@ public class GeneticAlgorithm {
 		SelectionStrategy<List<DomBuyRule>> selectionStrategy = new BotTournamentSelection(
 				prob);
 		
-		//selectionStrategy = new BotRouletteSelection();
+		selectionStrategy = new BotRouletteSelection();
 		
 		Random rng = new MersenneTwisterRNG();
 		FitnessEvaluator<List<DomBuyRule>> cachedFE = new CachingFitnessEvaluator<>(
@@ -81,7 +81,7 @@ public class GeneticAlgorithm {
 
 		TerminationCondition targetCondition = new TargetFitness(
 				TARGET_FITNESSE, true);
-		targetCondition = new ElapsedTime(600*60*60*100); 
+		targetCondition = new ElapsedTime(Long.MAX_VALUE); 
 		// targetCondition = new GenerationCount(2000);
 
 		List<DomBuyRule> result = engine.evolve(INITIAL_POPULATION_SIZE, ELITES,
