@@ -11,6 +11,7 @@ import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.framework.CachingFitnessEvaluator;
 import org.uncommons.watchmaker.framework.CandidateFactory;
 import org.uncommons.watchmaker.framework.EvolutionEngine;
+import org.uncommons.watchmaker.framework.EvolutionObserver;
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
@@ -41,10 +42,17 @@ public class GeneticAlgorithm {
 	private static final int INITIAL_POPULATION_SIZE = 100;
 	private static final double TOURNAMENT_PRESSURE = 0.9;
 
+	private List<EvolutionObserver<List<DomBuyRule>>> observers;
+	
 	public GeneticAlgorithm() {
+		observers = new ArrayList<>();
 	}
 
-	public void runGeneticAlgorithm() {
+	public void addObserver(EvolutionObserver<List<DomBuyRule>> observer) {
+		observers.add(observer);
+	}
+	
+	public void run() {
 		List<DomCardName> realm = smithyRealm();
 		List<DomBuyRule> bigMoney = getBigMoney();
 		Probability prob = new Probability(TOURNAMENT_PRESSURE);
@@ -73,12 +81,9 @@ public class GeneticAlgorithm {
 				candidateFactory, evolutionScheme, fitnessEvaluator, selectionStrategy,
 				rng);
 		List<Double> fitnesses = new ArrayList<>();
-		EvolutionMonitor<List<DomBuyRule>> evolutionMonitor = new EvolutionMonitor<>();
-		engine.addEvolutionObserver(evolutionMonitor);
-		JFrame frame = new JFrame();
-		frame.add(evolutionMonitor.getGUIComponent());
-		frame.setVisible(true);
-
+		
+		attachObserver(engine);
+		
 		TerminationCondition targetCondition = new TargetFitness(
 				TARGET_FITNESSE, true);
 		targetCondition = new ElapsedTime(Long.MAX_VALUE); 
@@ -90,6 +95,10 @@ public class GeneticAlgorithm {
 		toXML.addBuyRules(result);
 		System.out.println(toXML.getXML());
 		System.out.println(fitnesses);
+	}
+
+	private void attachObserver(EvolutionEngine<List<DomBuyRule>> engine) {
+		observers.forEach(observer -> engine.addEvolutionObserver(observer));
 	}
 
 	public List<DomBuyRule> getBigMoney() {
@@ -115,7 +124,7 @@ public class GeneticAlgorithm {
 
 	public static void main(String[] args) {
 		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-		geneticAlgorithm.runGeneticAlgorithm();
+		geneticAlgorithm.run();
 	}
 
 }

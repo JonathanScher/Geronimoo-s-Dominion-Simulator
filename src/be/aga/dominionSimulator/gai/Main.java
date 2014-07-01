@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JFrame;
+
 import org.uncommons.maths.random.MersenneTwisterRNG;
+import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
 
 import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomEngine;
@@ -77,7 +80,15 @@ public class Main {
 
 	public static void runGAI() {
 		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-		geneticAlgorithm.runGeneticAlgorithm();
+		
+		EvolutionMonitor<List<DomBuyRule>> evolutionMonitor = new EvolutionMonitor<>();
+		geneticAlgorithm.addObserver(evolutionMonitor);
+		JFrame frame = new JFrame();
+		frame.add(evolutionMonitor.getGUIComponent());
+		frame.setVisible(true);
+		frame.setSize(800, 600);
+
+		geneticAlgorithm.run();
 	}
 
 	private static void runGames() {
