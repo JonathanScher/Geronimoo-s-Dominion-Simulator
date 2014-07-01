@@ -1,6 +1,5 @@
 package be.aga.dominionSimulator.gai.factory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 

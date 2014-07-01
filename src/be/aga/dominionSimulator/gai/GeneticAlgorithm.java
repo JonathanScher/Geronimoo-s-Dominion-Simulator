@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JFrame;
-
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.framework.CachingFitnessEvaluator;
@@ -17,33 +15,23 @@ import org.uncommons.watchmaker.framework.FitnessEvaluator;
 import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 import org.uncommons.watchmaker.framework.TerminationCondition;
-import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
-import org.uncommons.watchmaker.framework.operators.ListCrossover;
-import org.uncommons.watchmaker.framework.termination.ElapsedTime;
-import org.uncommons.watchmaker.framework.termination.TargetFitness;
-import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
 
 import be.aga.dominionSimulator.DomBuyRule;
-import be.aga.dominionSimulator.DomPlayer;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.gai.factory.BuyRuleListFactory;
+import be.aga.dominionSimulator.gai.factory.EvolutionPipelineFactory;
 import be.aga.dominionSimulator.gai.fitnesse.BotEvaluator;
-import be.aga.dominionSimulator.gai.mutation.AddGene;
-import be.aga.dominionSimulator.gai.mutation.ModifyOperand;
-import be.aga.dominionSimulator.gai.mutation.ProtectedListInversion;
-import be.aga.dominionSimulator.gai.mutation.RemoveGene;
 import be.aga.dominionSimulator.gai.selection.BotRouletteSelection;
 import be.aga.dominionSimulator.gai.selection.BotTournamentSelection;
 
 public class GeneticAlgorithm {
 
 	private static final int ELITES = 50;
-	private static final double TARGET_FITNESSE = 85;
 	private static final int INITIAL_POPULATION_SIZE = 100;
 	private static final double TOURNAMENT_PRESSURE = 0.9;
 
 	private List<EvolutionObserver<List<DomBuyRule>>> observers;
-	
+
 	public GeneticAlgorithm() {
 		observers = new ArrayList<>();
 	}
@@ -51,80 +39,40 @@ public class GeneticAlgorithm {
 	public void addObserver(EvolutionObserver<List<DomBuyRule>> observer) {
 		observers.add(observer);
 	}
-	
-	public void run() {
-		List<DomCardName> realm = smithyRealm();
-		List<DomBuyRule> bigMoney = getBigMoney();
-		Probability prob = new Probability(TOURNAMENT_PRESSURE);
 
-		List<EvolutionaryOperator<List<DomBuyRule>>> pipeline = new ArrayList<>();
-		pipeline.add(new ListCrossover<>());
-		pipeline.add(new ProtectedListInversion<>(new Probability(0.2)));
-		pipeline.add(new AddGene(realm, new Probability(0.2)));
-		pipeline.add(new ModifyOperand(realm, new Probability(0.2)));
-		pipeline.add(new RemoveGene(new Probability(0.2)));
-		CandidateFactory<List<DomBuyRule>> candidateFactory = new BuyRuleListFactory(
-				realm);
-		EvolutionaryOperator<List<DomBuyRule>> evolutionScheme = new EvolutionPipeline<>(
-				pipeline);
-		FitnessEvaluator<List<DomBuyRule>> fitnessEvaluator = new BotEvaluator(
-				bigMoney);
+	public void run(List<DomCardName> realm, List<DomBuyRule> opponent,
+			TerminationCondition termination) {
+		Probability prob = new Probability(TOURNAMENT_PRESSURE);
 		SelectionStrategy<List<DomBuyRule>> selectionStrategy = new BotTournamentSelection(
 				prob);
-		
-		selectionStrategy = new BotRouletteSelection();
-		
+
+		run(realm, opponent, termination, new BotRouletteSelection());
+	}
+
+	public void run(List<DomCardName> realm, List<DomBuyRule> opponent,
+			TerminationCondition termination,
+			SelectionStrategy<List<DomBuyRule>> selectionStrategy) {
+
+		CandidateFactory<List<DomBuyRule>> candidateFactory = new BuyRuleListFactory(
+				realm);
+		EvolutionaryOperator<List<DomBuyRule>> evolutionScheme = EvolutionPipelineFactory.INSTANCE
+				.generatePipeline(realm);
+		FitnessEvaluator<List<DomBuyRule>> fitnessEvaluator = new BotEvaluator(
+				opponent);
+
 		Random rng = new MersenneTwisterRNG();
 		FitnessEvaluator<List<DomBuyRule>> cachedFE = new CachingFitnessEvaluator<>(
 				fitnessEvaluator);
 		EvolutionEngine<List<DomBuyRule>> engine = new GenerationalEvolutionEngine<>(
-				candidateFactory, evolutionScheme, fitnessEvaluator, selectionStrategy,
-				rng);
-		List<Double> fitnesses = new ArrayList<>();
-		
-		attachObserver(engine);
-		
-		TerminationCondition targetCondition = new TargetFitness(
-				TARGET_FITNESSE, true);
-		targetCondition = new ElapsedTime(Long.MAX_VALUE); 
-		// targetCondition = new GenerationCount(2000);
+				candidateFactory, evolutionScheme, fitnessEvaluator,
+				selectionStrategy, rng);
 
-		List<DomBuyRule> result = engine.evolve(INITIAL_POPULATION_SIZE, ELITES,
-				targetCondition);
-		DomPlayer toXML = new DomPlayer("solution");
-		toXML.addBuyRules(result);
-		System.out.println(toXML.getXML());
-		System.out.println(fitnesses);
+		attachObserver(engine);
+
+		engine.evolve(INITIAL_POPULATION_SIZE, ELITES, termination);
 	}
 
 	private void attachObserver(EvolutionEngine<List<DomBuyRule>> engine) {
 		observers.forEach(observer -> engine.addEvolutionObserver(observer));
 	}
-
-	public List<DomBuyRule> getBigMoney() {
-		List<DomBuyRule> bigMoney = new ArrayList<>();
-		bigMoney.add(new DomBuyRule(DomCardName.Province));
-		bigMoney.add(new DomBuyRule(DomCardName.Gold));
-		bigMoney.add(new DomBuyRule(DomCardName.Silver));
-		return bigMoney;
-	}
-
-	public List<DomCardName> smithyRealm() {
-		List<DomCardName> realm = new ArrayList<DomCardName>();
-		realm.add(DomCardName.Province);
-		realm.add(DomCardName.Duchy);
-		realm.add(DomCardName.Estate);
-		realm.add(DomCardName.Gold);
-		realm.add(DomCardName.Silver);
-		realm.add(DomCardName.Copper);
-		realm.add(DomCardName.Smithy);
-		return realm;
-
-	}
-
-	public static void main(String[] args) {
-		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-		geneticAlgorithm.run();
-	}
-
 }

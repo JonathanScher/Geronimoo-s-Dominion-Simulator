@@ -7,6 +7,9 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import org.uncommons.maths.random.MersenneTwisterRNG;
+import org.uncommons.watchmaker.framework.TerminationCondition;
+import org.uncommons.watchmaker.framework.termination.ElapsedTime;
+import org.uncommons.watchmaker.framework.termination.TargetFitness;
 import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
 
 import be.aga.dominionSimulator.DomBuyRule;
@@ -14,11 +17,14 @@ import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomGame;
 import be.aga.dominionSimulator.DomPlayer;
 import be.aga.dominionSimulator.enums.DomCardName;
+import be.aga.dominionSimulator.gai.factory.BotFactory;
 import be.aga.dominionSimulator.gai.factory.BuyRuleListFactory;
+import be.aga.dominionSimulator.gai.factory.RealmFactory;
 import be.aga.dominionSimulator.gai.fitnesse.BotEvaluator;
 
 @SuppressWarnings("unused")
 public class Main {
+	private static final double TARGET_FITNESSE = 85;
 
 	public static void main(String[] args) {
 		runGAI();
@@ -27,6 +33,29 @@ public class Main {
 //		runEngineWithTwoBigMoney();
 	}
 
+	public static void runGAI() {
+		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+		
+		EvolutionMonitor<List<DomBuyRule>> evolutionMonitor = new EvolutionMonitor<>();
+		geneticAlgorithm.addObserver(evolutionMonitor);
+		JFrame frame = new JFrame();
+		frame.add(evolutionMonitor.getGUIComponent());
+		frame.setVisible(true);
+		frame.setSize(800, 600);
+
+		List<DomBuyRule> bot = new BotFactory().generateBigMoney();
+		List<DomCardName> realm = new RealmFactory().generateSmithyRealm();
+		
+		TerminationCondition targetCondition = new TargetFitness(
+				TARGET_FITNESSE, true);
+		targetCondition = new ElapsedTime(Long.MAX_VALUE);
+		// targetCondition = new GenerationCount(2000);
+		geneticAlgorithm.run(realm, bot, targetCondition);
+	}
+	
+	
+	
+	
 	private static void runBotEvaluatorWithOneEstateBuyerAndOneBM() {
 		BuyStrategy bigMoney = generateBigMoneyStrategy();
 
@@ -78,18 +107,7 @@ public class Main {
 		return bigMoney;
 	}
 
-	public static void runGAI() {
-		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-		
-		EvolutionMonitor<List<DomBuyRule>> evolutionMonitor = new EvolutionMonitor<>();
-		geneticAlgorithm.addObserver(evolutionMonitor);
-		JFrame frame = new JFrame();
-		frame.add(evolutionMonitor.getGUIComponent());
-		frame.setVisible(true);
-		frame.setSize(800, 600);
 
-		geneticAlgorithm.run();
-	}
 
 	private static void runGames() {
 		List<DomPlayer> players = new ArrayList<>();
