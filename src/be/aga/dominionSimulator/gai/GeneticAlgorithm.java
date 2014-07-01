@@ -21,6 +21,7 @@ import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.gai.factory.BuyRuleListFactory;
 import be.aga.dominionSimulator.gai.factory.EvolutionPipelineFactory;
 import be.aga.dominionSimulator.gai.fitnesse.BotEvaluator;
+import be.aga.dominionSimulator.gai.fitnesse.CaptureStrangeBehaviours;
 import be.aga.dominionSimulator.gai.selection.BotRouletteSelection;
 import be.aga.dominionSimulator.gai.selection.BotTournamentSelection;
 
@@ -64,7 +65,7 @@ public class GeneticAlgorithm {
 		FitnessEvaluator<List<DomBuyRule>> cachedFE = new CachingFitnessEvaluator<>(
 				fitnessEvaluator);
 		EvolutionEngine<List<DomBuyRule>> engine = new GenerationalEvolutionEngine<>(
-				candidateFactory, evolutionScheme, fitnessEvaluator,
+				candidateFactory, evolutionScheme, new CaptureStrangeBehaviours(fitnessEvaluator),
 				selectionStrategy, rng);
 
 		attachObserver(engine);
