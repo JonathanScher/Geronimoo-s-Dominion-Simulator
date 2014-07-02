@@ -3,14 +3,16 @@ package be.aga.dominionSimulator.gai.fitnesse;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.log4j.Logger;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import be.aga.dominionSimulator.DomBuyRule;
 
 import com.google.common.collect.MapMaker;
 
-public class CaptureStrangeBehaviours implements
-		FitnessEvaluator<List<DomBuyRule>> {
+public class LogStrangeBehaviours implements FitnessEvaluator<List<DomBuyRule>> {
+	private static final Logger LOGGER = Logger
+			.getLogger(LogStrangeBehaviours.class);
 	private final FitnessEvaluator<List<DomBuyRule>> delegate;
 
 	// This field is marked as transient, even though the class is not
@@ -25,7 +27,7 @@ public class CaptureStrangeBehaviours implements
 	 * @param delegate
 	 *            The fitness evaluator that performs the actual calculations.
 	 */
-	public CaptureStrangeBehaviours(FitnessEvaluator<List<DomBuyRule>> delegate) {
+	public LogStrangeBehaviours(FitnessEvaluator<List<DomBuyRule>> delegate) {
 		this.delegate = delegate;
 	}
 
@@ -45,9 +47,11 @@ public class CaptureStrangeBehaviours implements
 		Double fitness = delegate.getFitness(candidate, population);
 		cache.put(candidate, fitness);
 
-		if (cachedFitness != null && Math.abs(fitness - cachedFitness) > 10) {
-			System.out.println("anormal behaviour: " + cachedFitness
-					+ " becomes " + fitness);
+		if (LOGGER.isInfoEnabled()) {
+			if (cachedFitness != null && Math.abs(fitness - cachedFitness) > 10) {
+				LOGGER.info("anormal behaviour: " + cachedFitness
+						+ " becomes " + fitness);
+			}
 		}
 
 		return fitness;
