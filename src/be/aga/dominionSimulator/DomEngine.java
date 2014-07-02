@@ -42,14 +42,7 @@ public class DomEngine {
     public static int logIndentation=0;
 	public static int logPlayerIndentation=0;
     private static final Logger LOGGER = Logger.getLogger( DomEngine.class );
-    public static final Level LEVEL = Level.INFO;
     public static final boolean addAppender = true;
-    static {
-      LOGGER.setLevel( DomEngine.LEVEL );
-      LOGGER.removeAllAppenders();
-      if (addAppender)
-         LOGGER.addAppender(new ConsoleAppender(new SimpleLayout()) );
-    }
 
     private ArrayList< DomPlayer > players = new ArrayList< DomPlayer >();
 	private long findWinnerTime=0;

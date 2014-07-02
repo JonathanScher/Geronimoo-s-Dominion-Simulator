@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 
-import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
 
 import be.aga.dominionSimulator.enums.DomBotType;
 import be.aga.dominionSimulator.enums.DomCardName;
@@ -14,12 +12,6 @@ import be.aga.dominionSimulator.enums.DomCardType;
 
 public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
     protected static final Logger LOGGER = Logger.getLogger( DomDeck.class );
-    static {
-        LOGGER.setLevel( DomEngine.LEVEL );
-        LOGGER.removeAllAppenders();
-        if (DomEngine.addAppender)
-            LOGGER.addAppender(new ConsoleAppender(new SimpleLayout()) );
-    }
 
     private ArrayList< DomCard > drawDeck = new ArrayList< DomCard >();
     private final ArrayList< DomCard > discardPile = new ArrayList< DomCard >();
@@ -267,9 +259,10 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
      */
     public int countVictoryPoints() {
       int count = 0; 
-      for (DomCardName theCardName : keySet()) {
+      for (Entry<DomCardName,ArrayList<DomCard>>  entry : entrySet()) {
+    	  DomCardName theCardName = entry.getKey();
         if (theCardName.hasCardType( DomCardType.Victory) || theCardName.hasCardType( DomCardType.Curse )) {
-          count += get( theCardName ).size()* theCardName.getVictoryValue(owner);    
+          count += entry.getValue().size()* theCardName.getVictoryValue(owner);    
         }
       }
       for (DomCard theCard : islandMat) {

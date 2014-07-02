@@ -3,9 +3,7 @@ package be.aga.dominionSimulator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
 
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
@@ -13,12 +11,6 @@ import be.aga.dominionSimulator.enums.DomPhase;
 
 public class DomGame {
 	private static final Logger LOGGER = Logger.getLogger(DomGame.class);
-	static {
-		LOGGER.setLevel(DomEngine.LEVEL);
-		LOGGER.removeAllAppenders();
-		if (DomEngine.addAppender)
-			LOGGER.addAppender(new ConsoleAppender(new SimpleLayout()));
-	}
 
 	ArrayList<DomPlayer> players = new ArrayList<DomPlayer>();
 	DomBoard board;

@@ -6,9 +6,7 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
 
 import be.aga.dominionSimulator.cards.FarmlandCard;
 import be.aga.dominionSimulator.cards.HagglerCard;
@@ -29,12 +27,6 @@ import be.aga.dominionSimulator.enums.DomPlayStrategy;
 
 public class DomPlayer implements Comparable<DomPlayer> {
 	protected static final Logger LOGGER = Logger.getLogger(DomPlayer.class);
-	static {
-		LOGGER.setLevel(DomEngine.LEVEL);
-		LOGGER.removeAllAppenders();
-		if (DomEngine.addAppender)
-			LOGGER.addAppender(new ConsoleAppender(new SimpleLayout()));
-	}
 
 	private List<DomBuyRule> buyRules = new ArrayList<DomBuyRule>();
 	private List<DomBuyRule> prizeBuyRules = new ArrayList<DomBuyRule>();
