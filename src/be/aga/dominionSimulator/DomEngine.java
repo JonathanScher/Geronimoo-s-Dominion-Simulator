@@ -38,7 +38,7 @@ import be.aga.dominionSimulator.gui.StatusBar;
 public class DomEngine {
     public static double NUMBER_OF_GAMES = 1000;
     public static boolean haveToLog;
-    public static String myLog;
+    public static String myLog="";
     public static int logIndentation=0;
 	public static int logPlayerIndentation=0;
     private static final Logger LOGGER = Logger.getLogger( DomEngine.class );

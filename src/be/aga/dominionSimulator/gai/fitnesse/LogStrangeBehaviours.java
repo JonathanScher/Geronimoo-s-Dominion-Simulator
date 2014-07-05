@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import be.aga.dominionSimulator.DomBuyRule;
+import be.aga.dominionSimulator.gai.BuyStrategy;
 
 import com.google.common.collect.MapMaker;
 
@@ -48,9 +49,11 @@ public class LogStrangeBehaviours implements FitnessEvaluator<List<DomBuyRule>> 
 		cache.put(candidate, fitness);
 
 		if (LOGGER.isInfoEnabled()) {
-			if (cachedFitness != null && Math.abs(fitness - cachedFitness) > 10) {
+			if (cachedFitness != null && Math.abs(fitness - cachedFitness) > 40) {
 				LOGGER.info("anormal behaviour: " + cachedFitness
 						+ " becomes " + fitness);
+				BuyStrategy strategy = new BuyStrategy(candidate);
+				LOGGER.info(strategy);
 			}
 		}
 

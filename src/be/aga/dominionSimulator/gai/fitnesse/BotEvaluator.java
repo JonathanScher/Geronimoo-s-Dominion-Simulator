@@ -8,6 +8,7 @@ import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import be.aga.dominionSimulator.DomBoard;
 import be.aga.dominionSimulator.DomBuyRule;
+import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomGame;
 import be.aga.dominionSimulator.DomPlayer;
 
@@ -31,12 +32,11 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 		players.add(candidatePlayer);
 		players.add(opponentPlayer);
 
-		return startSimulation(players, false,
-				false);
+		return startSimulation(players, false);
 	}
 
 	public double startSimulation(List<DomPlayer> thePlayers,
-			boolean keepOrder, boolean aShowLog) {
+			boolean keepOrder) {
 		List<DomPlayer> players = new ArrayList<>();
 		List<Double> ratio = new ArrayList<>();
 		DomPlayer candidatePlayer = thePlayers.get(0);

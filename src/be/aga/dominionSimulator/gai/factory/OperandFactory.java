@@ -26,9 +26,11 @@ public class OperandFactory {
 		DomBotFunction function;
 
 		if (isRightHand) {
-			function = functionFactory.generateRightBotFunction(rand);
+//			function = functionFactory.generateRightBotFunction(rand);
+			function = DomBotFunction.constant;
 		} else {
-			function = functionFactory.generateRandomBotFunction(rand);
+//			function = functionFactory.generateRandomBotFunction(rand);
+			function = DomBotFunction.countCardsInDeck;
 		}
 		operand.setFunction(function);
 
