@@ -210,6 +210,7 @@ public enum DomCardName  {
     private int victoryValue;
     private int playPriority;
     private int discardPriority; 
+    private String stringName;
     
     DomCardName(int aCoinCost, int aPotionCost, int aCoinValue, int aVictoryValue, int aPlayPriority, int aDiscardPriority, DomCardType[] aTypes) {
       cost = new DomCost(aCoinCost, aPotionCost);
@@ -709,10 +710,12 @@ public enum DomCardName  {
     }
     
     public String toString(){
-      String theString = super.toString().replaceAll( "_", " " ).replaceAll( "\\$", "'" );
-      if (this==DomCardName.Ill_Gotten_Gains)
-    	  return "Ill-Gotten Gains";
-	  return theString;
+    	if(stringName == null) {
+    		stringName = super.toString().replaceAll( "_", " " ).replaceAll( "\\$", "'" );
+    	      if (this==DomCardName.Ill_Gotten_Gains)
+    	    	  stringName = "Ill-Gotten Gains";
+    	}
+	  return stringName;
     }
 
     public final int getCoinCost( DomGame aDomGame) {
@@ -773,27 +776,31 @@ public enum DomCardName  {
 		return possibleBanes.toArray();
 	}
 
+	private String html;
 	public String toHTML() {
-      String theString = toString();
-   	  if (hasCardType(DomCardType.Curse))
-        return "<FONT style=\"BACKGROUND-COLOR: #CC8BC7\">" + theString + "</FONT>";
-   	  if (hasCardType(DomCardType.Treasure) && hasCardType(DomCardType.Victory))
-      	return "<FONT style=\"BACKGROUND-COLOR: #A9E96E\">" + theString + "</FONT>";
-   	  if (hasCardType(DomCardType.Action) && hasCardType(DomCardType.Victory))
-        return "<FONT style=\"BACKGROUND-COLOR: #6EE9C2\">" + theString + "</FONT>";
-   	  if (hasCardType(DomCardType.Reaction) && hasCardType(DomCardType.Treasure))
-          return "<FONT style=\"BACKGROUND-COLOR: #CCFF99\">" + theString + "</FONT>";
-   	  if (hasCardType(DomCardType.Reaction))
-      	return "<FONT style=\"BACKGROUND-COLOR: #91A4FC\">" + theString + "</FONT>";
-   	  if (hasCardType(DomCardType.Treasure))
-      	return "<FONT style=\"BACKGROUND-COLOR: #F3F584\">" + theString + "</FONT>";
-   	  if (hasCardType(DomCardType.Victory))
-   		return "<FONT style=\"BACKGROUND-COLOR: #8EBF75\">" + theString + "</FONT>";
-  	  if (hasCardType(DomCardType.Duration))
-  	    return "<FONT style=\"BACKGROUND-COLOR: #F88017\">" + theString + "</FONT>";
-   	  if (hasCardType(DomCardType.Action))
-        return "<FONT style=\"BACKGROUND-COLOR: #D9D9D9 \">" + theString + "</FONT>";
-	  return theString;
+		if(html == null){
+				String theString = toString();
+		   	  if (hasCardType(DomCardType.Curse))
+		   		theString = "<FONT style=\"BACKGROUND-COLOR: #CC8BC7\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Treasure) && hasCardType(DomCardType.Victory))
+		      	theString = "<FONT style=\"BACKGROUND-COLOR: #A9E96E\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Action) && hasCardType(DomCardType.Victory))
+		        theString = "<FONT style=\"BACKGROUND-COLOR: #6EE9C2\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Reaction) && hasCardType(DomCardType.Treasure))
+		          theString = "<FONT style=\"BACKGROUND-COLOR: #CCFF99\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Reaction))
+		      	theString = "<FONT style=\"BACKGROUND-COLOR: #91A4FC\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Treasure))
+		      	theString = "<FONT style=\"BACKGROUND-COLOR: #F3F584\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Victory))
+		   		theString = "<FONT style=\"BACKGROUND-COLOR: #8EBF75\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Duration))
+		  	    theString = "<FONT style=\"BACKGROUND-COLOR: #F88017\">" + theString + "</FONT>";
+		   	  else if (hasCardType(DomCardType.Action))
+		        theString = "<FONT style=\"BACKGROUND-COLOR: #D9D9D9 \">" + theString + "</FONT>";
+		   	  html = theString;
+		}
+	  return html;
 	}
 	
 	public DomSet getSet() {

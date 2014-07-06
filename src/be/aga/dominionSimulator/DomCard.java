@@ -77,12 +77,17 @@ public class DomCard implements Comparable< DomCard >{
       return name;
     }
     
+    
+    private String toString;
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-      return name.toHTML();
+    	if(toString == null) {
+    		toString = name.toHTML();
+    	}
+      return toString;
     }
 
     /**

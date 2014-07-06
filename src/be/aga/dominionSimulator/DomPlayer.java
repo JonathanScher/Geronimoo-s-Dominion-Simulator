@@ -172,7 +172,7 @@ public class DomPlayer implements Comparable<DomPlayer> {
      */
 	public void showHand() {
 		if (getLogHandler().getHaveToLog())
-			getLogHandler().addToLog(name + "'s cards in Hand: " + cardsInHand);
+			getLogHandler().addToLog(name, "'s cards in Hand: ", cardsInHand.toString());
 	}
 
 	/**

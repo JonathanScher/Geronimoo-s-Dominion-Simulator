@@ -2,33 +2,47 @@ package be.aga.dominionSimulator;
 
 public class LogHandler {
 	private boolean haveToLog;
-	private String myLog = "";
+	private StringBuilder myLog;
 	private int logIndentation = 0;
 	private int logPlayerIndentation = 0;
+
+	public LogHandler() {
+		myLog = new StringBuilder();
+	}
 
 	/**
 	 * @param aString
 	 */
 	public void addToLog(String aString) {
-		StringBuilder theBuilder = new StringBuilder(myLog);
 		for (int i = 0; i < logPlayerIndentation; i++) {
-			theBuilder.append("&nbsp;&nbsp;&nbsp;");
+			myLog.append("&nbsp;&nbsp;&nbsp;");
 		}
 		for (int i = 0; i < logIndentation; i++) {
-			theBuilder.append("...&nbsp;");
+			myLog.append("...&nbsp;");
 		}
-		theBuilder.append(aString).append("<BR>");
-		myLog = theBuilder.toString();
+		myLog.append(aString).append("<BR>");
+	}
+	
+	public void addToLog(String... strings) {
+		for (int i = 0; i < logPlayerIndentation; i++) {
+			myLog.append("&nbsp;&nbsp;&nbsp;");
+		}
+		for (int i = 0; i < logIndentation; i++) {
+			myLog.append("...&nbsp;");
+		}
+		for(String aString:strings) {
+			myLog.append(aString);
+		}
+		myLog.append("<BR>");
 	}
 
 	public void addToStartOfLog(String string) {
-		StringBuilder theBuilder = new StringBuilder();
-		theBuilder.append(string).append("<BR>").append(myLog);
-		myLog = theBuilder.toString();
+		myLog.insert(0, "<BR>");
+		myLog.insert(0, string);
 	}
 
 	public void setLog(String string) {
-		myLog = string;
+		myLog = new StringBuilder(string);
 	}
 
 	public void setHaveToLog(boolean haveToLog) {
@@ -56,6 +70,6 @@ public class LogHandler {
 	}
 
 	public String getMyLog() {
-		return myLog;
+		return myLog.toString();
 	}
 }

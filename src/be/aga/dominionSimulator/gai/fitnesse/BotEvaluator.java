@@ -49,7 +49,9 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 			if (!keepOrder) {
 				Collections.shuffle(players);
 			}
-			DomGame theGame = new DomGame(theBoard, players, new LogHandler());
+			LogHandler logHandler = new LogHandler();
+			logHandler.setHaveToLog(true);
+			DomGame theGame = new DomGame(theBoard, players, logHandler);
 			theGame.run();
 			theGame.determineWinners();
 			ratio.add(Double.valueOf(candidatePlayer.countVictoryPoints())
