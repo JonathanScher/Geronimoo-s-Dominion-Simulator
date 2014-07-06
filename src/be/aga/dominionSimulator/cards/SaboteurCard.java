@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class SaboteurCard extends DomCard {
@@ -12,7 +13,7 @@ public class SaboteurCard extends DomCard {
       super( DomCardName.Saboteur);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       for (DomPlayer thePlayer : owner.getOpponents()) {
         if (thePlayer.checkDefense() )
         	continue;

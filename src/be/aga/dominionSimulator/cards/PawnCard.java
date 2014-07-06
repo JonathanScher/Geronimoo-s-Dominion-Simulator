@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class PawnCard extends DomCard {
@@ -9,7 +10,7 @@ public class PawnCard extends DomCard {
       super( DomCardName.Pawn);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       int theChoicesCount=0;
       boolean coinsChosen=false;
       boolean actionChosen=false;

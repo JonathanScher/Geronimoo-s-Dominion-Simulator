@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -15,7 +16,7 @@ public class CellarCard extends DomCard {
       super( DomCardName.Cellar);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
   	  deckSize = owner.getDeckSize();
       owner.addActions( 1 );
       discardCount=0;

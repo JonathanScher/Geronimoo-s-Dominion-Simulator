@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Ill_Gotten_GainsCard extends DomCard {
@@ -10,7 +11,7 @@ public class Ill_Gotten_GainsCard extends DomCard {
       super( DomCardName.Ill_Gotten_Gains);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
         owner.addAvailableCoins( 1 );
         DomCard theCopper = DomCardName.Copper.createNewCardInstance();
         theCopper.setOwner(owner);

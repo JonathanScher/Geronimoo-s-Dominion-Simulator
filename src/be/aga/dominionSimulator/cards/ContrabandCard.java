@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class ContrabandCard extends DomCard {
@@ -10,7 +11,7 @@ public class ContrabandCard extends DomCard {
       super( DomCardName.Contraband);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.availableCoins+=getCoinValue();        
       owner.addAvailableBuys(1);
       DomCardName theChosenCard = null;
@@ -24,7 +25,7 @@ public class ContrabandCard extends DomCard {
           theChosenCard=null;
       }
       owner.addForbiddenCardToBuy(theChosenCard);
-      if (DomEngine.haveToLog) 
-          DomEngine.addToLog( owner + " can't buy " + theChosenCard.toHTML() +" this turn");
+      if (logHandler.getHaveToLog()) 
+          logHandler.addToLog( owner + " can't buy " + theChosenCard.toHTML() +" this turn");
     }
 }

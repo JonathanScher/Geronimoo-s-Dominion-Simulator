@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -12,7 +13,7 @@ public class GolemCard extends DomCard {
       super( DomCardName.Golem);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       ArrayList<DomCard> theRevealedActions = new ArrayList<DomCard>();
       ArrayList<DomCard> theCardsToDiscard = new ArrayList<DomCard>();
       while (theRevealedActions.size()<2 && owner.getDeckSize()>0) {
@@ -35,6 +36,6 @@ public class GolemCard extends DomCard {
         owner.play(theRevealedActions.remove(0));
       }
       owner.actionsLeft-=2;
-//      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + theRevealedCards );
+//      if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " reveals " + theRevealedCards );
     }
 }

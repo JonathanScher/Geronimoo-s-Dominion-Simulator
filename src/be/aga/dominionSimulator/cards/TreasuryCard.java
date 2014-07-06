@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -9,7 +10,7 @@ public class TreasuryCard extends DomCard {
       super( DomCardName.Treasury);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(1);
       owner.addAvailableCoins(1);
       owner.drawCards(1);

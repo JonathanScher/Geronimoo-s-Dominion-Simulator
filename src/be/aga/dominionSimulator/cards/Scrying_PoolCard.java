@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -12,7 +13,7 @@ public class Scrying_PoolCard extends DomCard {
       super( DomCardName.Scrying_Pool);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(1);
       ArrayList< DomCard > theCards = owner.revealTopCards(1);
       if (!theCards.isEmpty()){

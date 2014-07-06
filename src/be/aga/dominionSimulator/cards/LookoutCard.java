@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class LookoutCard extends DomCard {
@@ -11,7 +12,7 @@ public class LookoutCard extends DomCard {
       super( DomCardName.Lookout);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions( 1 );
       ArrayList< DomCard > theRevealedCards = owner.revealTopCards( 3 );
       if (theRevealedCards.isEmpty())

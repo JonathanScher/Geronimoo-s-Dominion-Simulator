@@ -4,6 +4,7 @@ import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class MinionCard extends DomCard {
@@ -11,7 +12,7 @@ public class MinionCard extends DomCard {
       super( DomCardName.Minion );
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (!owner.getCardsFromHand( DomCardName.Minion ).isEmpty()) {
         //if there are more Minions in hand, always play for +$2
         playForMoney();

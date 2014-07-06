@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
 
@@ -12,7 +13,7 @@ public class TacticianCard extends DomCard {
       super( DomCardName.Tactician);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       durationFailed = false;
       if (owner.getCardsInHand().size()>0) {
         owner.discardHand();

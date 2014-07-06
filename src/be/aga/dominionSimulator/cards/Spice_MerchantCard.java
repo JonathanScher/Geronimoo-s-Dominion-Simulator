@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
@@ -13,7 +14,7 @@ public class Spice_MerchantCard extends DomCard {
       super( DomCardName.Spice_Merchant);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (!trashTreasureFromHand())
     	  return;
       if (owner.getDeckSize()==0 

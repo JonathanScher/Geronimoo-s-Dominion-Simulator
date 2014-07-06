@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class ForgeCard extends DomCard {
@@ -13,7 +14,7 @@ public class ForgeCard extends DomCard {
 
 	//TODO this implementation will trash without consideration to total money in deck
 	//or what the player can buy with the rest of his cards...
-    public void play() {
+    public void play(LogHandler logHandler) {
       ArrayList<DomCard> cardsInHand = owner.getCardsInHand();
       ArrayList<DomCard> theFinalCardsToTrash = new ArrayList<DomCard>();
       DomCardName theDesiredCardIfForgeNotUsed = owner.getDesiredCard(owner.getTotalPotentialCurrency(), false);

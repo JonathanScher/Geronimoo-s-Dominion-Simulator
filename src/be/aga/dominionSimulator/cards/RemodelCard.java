@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class RemodelCard extends DomCard {
@@ -12,7 +13,7 @@ public class RemodelCard extends DomCard {
       super( DomCardName.Remodel);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (owner.getCardsInHand().isEmpty())
     	return;
       DomCard theCardToTrash = findCardToTrash();

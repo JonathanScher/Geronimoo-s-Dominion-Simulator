@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Fool$s_GoldCard extends DomCard {
@@ -8,7 +9,7 @@ public class Fool$s_GoldCard extends DomCard {
       super( DomCardName.Fool$s_Gold);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (owner.getCardsFromPlay(DomCardName.Fool$s_Gold).size()>1){
     	  owner.addAvailableCoins(4);
       } else {

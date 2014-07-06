@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class StewardCard extends DomCard {
@@ -12,7 +13,7 @@ public class StewardCard extends DomCard {
       super( DomCardName.Steward);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
 //    	if (owner.getActionsLeft()>0 && owner.getDeckSize()>0) {
 //    	  owner.drawCards( 2 );
 //    	  return;

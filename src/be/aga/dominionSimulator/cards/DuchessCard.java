@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class DuchessCard extends DomCard {
@@ -11,7 +12,7 @@ public class DuchessCard extends DomCard {
       super( DomCardName.Duchess);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addAvailableCoins(2);
       selectTopCard(owner);
 	  for (DomPlayer player : owner.getOpponents())

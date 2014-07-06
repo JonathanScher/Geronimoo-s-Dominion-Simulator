@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -15,7 +16,7 @@ public class MineCard extends DomCard {
       super( DomCardName.Mine);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       checkForCardToMine();
       if (myCardToTrash==null)
     	  //possible if played by Golem for instance

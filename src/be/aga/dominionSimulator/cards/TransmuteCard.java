@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -12,7 +13,7 @@ public class TransmuteCard extends DomCard {
       super( DomCardName.Transmute);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	DomCard theCardToTrash = findCardToTrash();
         if (theCardToTrash==null) {
 	    	//possible if played with Throne Room/KC

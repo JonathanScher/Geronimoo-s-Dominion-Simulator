@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Black_MarketCard extends DomCard {
@@ -18,12 +19,12 @@ public class Black_MarketCard extends DomCard {
 		super(DomCardName.Black_Market);
 	}
 
-	public void play() {
+	public void play(LogHandler logHandler) {
 		owner.addAvailableCoins(2);
 		ArrayList<DomCard> theRevealedCards = owner.getCurrentGame()
 				.revealFromBlackMarketDeck();
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(owner + " reveals " + theRevealedCards);
+		if (logHandler.getHaveToLog())
+			logHandler.addToLog(owner + " reveals " + theRevealedCards);
 		if (theRevealedCards.isEmpty())
 			return;
 		owner.playTreasures();
@@ -41,8 +42,8 @@ public class Black_MarketCard extends DomCard {
 				break;
 			}
 		}
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(owner + " returns " + theRevealedCards
+		if (logHandler.getHaveToLog())
+			logHandler.addToLog(owner + " returns " + theRevealedCards
 					+ " to the Black Market Deck");
 		for (int i = theRevealedCards.size() - 1; i >= 0; i--) {
 			DomCard theCard = theRevealedCards.get(i);

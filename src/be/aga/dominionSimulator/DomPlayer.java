@@ -105,8 +105,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 					&& tryToBuy(theBuyRule.getCardToBuy()))
 				return;
 		}
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(name + " buys NOTHING!");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(name + " buys NOTHING!");
 		// a bit dirty setting buysLeft to 0 to make him stop trying to buy
 		// stuff and say 'buys nothing'
 		// TODO maybe clean this up
@@ -161,9 +161,9 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	public void drawCards(int aI) {
 		ArrayList<DomCard> theDrawnCards = deck.getTopCards(aI);
 		cardsInHand.addAll(theDrawnCards);
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " draws " + theDrawnCards.size()
-					+ " cards");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + " draws " + theDrawnCards.size() + " cards");
 		showHand();
 	}
 
@@ -171,8 +171,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
      * 
      */
 	public void showHand() {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(name + "'s cards in Hand: " + cardsInHand);
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(name + "'s cards in Hand: " + cardsInHand);
 	}
 
 	/**
@@ -232,9 +232,9 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	}
 
 	private void showBeginningOfTurnLog() {
-		DomEngine.addToLog(possessor != null ? "</i><i>" : "</i>");
-		DomEngine
-				.addToLog("<FONT style=\"COLOR: blue\"> *** "
+		getLogHandler().addToLog(possessor != null ? "</i><i>" : "</i>");
+		getLogHandler().addToLog(
+				"<FONT style=\"COLOR: blue\"> *** "
 						+ this
 						+ "'s turn "
 						+ getTurns()
@@ -263,9 +263,11 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	private void resolveHorseTraders() {
 		if (horseTradersPile.isEmpty())
 			return;
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " adds " + horseTradersPile.size() + " "
-					+ DomCardName.Horse_Traders.toHTML() + " to his hand");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + " adds " + horseTradersPile.size() + " "
+							+ DomCardName.Horse_Traders.toHTML()
+							+ " to his hand");
 		cardsInHand.addAll(horseTradersPile);
 		drawCards(horseTradersPile.size());
 		horseTradersPile.clear();
@@ -287,17 +289,17 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	private void resolveDurationEffects() {
 		// LOGGER.info(durationPile);
 		for (DomCard aCard : cardsInPlay) {
-			if (DomEngine.haveToLog)
-				DomEngine.addToLog(this + " resolves duration effect from "
-						+ aCard);
+			if (getLogHandler().getHaveToLog())
+				getLogHandler().addToLog(
+						this + " resolves duration effect from " + aCard);
 			aCard.resolveDuration();
 			aCard.setDiscardAtCleanup(true);
 		}
 	}
 
 	public void discardHand() {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " discards all cards in hand");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(this + " discards all cards in hand");
 		deck.addToDiscardPile(cardsInHand);
 		cardsInHand.clear();
 	}
@@ -338,7 +340,7 @@ public class DomPlayer implements Comparable<DomPlayer> {
 			turns++;
 			sumTurns++;
 		}
-		if (DomEngine.haveToLog)
+		if (getLogHandler().getHaveToLog())
 			showBeginningOfTurnLog();
 		actionsLeft = 1;
 		buysLeft = 1;
@@ -381,7 +383,7 @@ public class DomPlayer implements Comparable<DomPlayer> {
 		}
 		theMessage.append(" to spend and " + buysLeft + " buy"
 				+ (buysLeft > 1 ? "s" : ""));
-		DomEngine.addToLog(theMessage.toString());
+		getLogHandler().addToLog(theMessage.toString());
 	}
 
 	/**
@@ -438,14 +440,15 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	 */
 	protected boolean tryToBuy(DomCardName aCardName) {
 		if (game.countInSupply(aCardName) == 0) {
-			// if (DomEngine.haveToLog) DomEngine.addToLog( aCardName +
+			// if (game.getLogHandler().getHaveToLog())
+			// game.getLogHandler().addToLog( aCardName +
 			// " is no more available to buy");
 			return false;
 		}
 		if (suicideIfBuys(aCardName)) {
-			if (DomEngine.haveToLog)
-				DomEngine
-						.addToLog("<FONT style=\"BACKGROUND-COLOR: red\">SUICIDE!</FONT> Can not buy "
+			if (getLogHandler().getHaveToLog())
+				getLogHandler().addToLog(
+						"<FONT style=\"BACKGROUND-COLOR: red\">SUICIDE!</FONT> Can not buy "
 								+ aCardName.toHTML());
 			return false;
 		}
@@ -516,8 +519,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	}
 
 	public void buy(DomCard aCard) {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " buys a " + aCard);
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(this + " buys a " + aCard);
 		deck.gain(aCard);
 		boughtCards.add(aCard);
 		availableCoins -= aCard.getCoinCost(getCurrentGame());
@@ -544,11 +547,12 @@ public class DomPlayer implements Comparable<DomPlayer> {
 			}
 		} while (theCardToPlay != null);
 
-		if (DomEngine.haveToLog) {
+		if (getLogHandler().getHaveToLog()) {
 			if (previousPlayedCardName != null) {
-				DomEngine.addToLog(name + " plays " + (sameCardCount + 1) + " "
-						+ previousPlayedCardName.toHTML()
-						+ (sameCardCount > 0 ? "s" : ""));
+				getLogHandler().addToLog(
+						name + " plays " + (sameCardCount + 1) + " "
+								+ previousPlayedCardName.toHTML()
+								+ (sameCardCount > 0 ? "s" : ""));
 				previousPlayedCardName = null;
 				sameCardCount = 0;
 			}
@@ -604,7 +608,7 @@ public class DomPlayer implements Comparable<DomPlayer> {
 		if (aCard.hasCardType(DomCardType.Action))
 			increaseActionsPlayed();
 		cardsInPlay.add(aCard);
-		if (DomEngine.haveToLog) {
+		if (getLogHandler().getHaveToLog()) {
 			playAndLog(aCard);
 		} else {
 			playThis(aCard);
@@ -614,9 +618,10 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	private void playAndLog(DomCard aCard) {
 		if (previousPlayedCardName != aCard.getName()) {
 			if (previousPlayedCardName != null) {
-				DomEngine.addToLog(name + " plays " + (sameCardCount + 1) + " "
-						+ previousPlayedCardName.toHTML()
-						+ (sameCardCount > 0 ? "s" : ""));
+				getLogHandler().addToLog(
+						name + " plays " + (sameCardCount + 1) + " "
+								+ previousPlayedCardName.toHTML()
+								+ (sameCardCount > 0 ? "s" : ""));
 			}
 			if (!aCard.hasCardType(DomCardType.Kingdom)
 					&& !aCard.hasCardType(DomCardType.Prize)) {
@@ -630,17 +635,21 @@ public class DomPlayer implements Comparable<DomPlayer> {
 		}
 		if (aCard.hasCardType(DomCardType.Kingdom)
 				|| aCard.hasCardType(DomCardType.Prize)) {
-			DomEngine.addToLog(name + " plays " + aCard);
+			getLogHandler().addToLog(name + " plays " + aCard);
 		}
-		DomEngine.logIndentation++;
+		getLogHandler().increaseLogIndentation();
 		playThis(aCard);
-		DomEngine.logIndentation--;
+		getLogHandler().decreaseLogIndentation();
+	}
+
+	public LogHandler getLogHandler() {
+		return game.getLogHandler();
 	}
 
 	public void playThis(DomCard aCard) {
 		if (aCard.hasCardType(DomCardType.Duration))
 			aCard.setDiscardAtCleanup(false);
-		aCard.play();
+		aCard.play(getLogHandler());
 	}
 
 	public void discard(ArrayList<DomCard> aCards) {
@@ -986,8 +995,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	 * @param aCardToDiscard
 	 */
 	public void discardFromHand(DomCard aCardToDiscard) {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " discards a " + aCardToDiscard);
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(this + " discards a " + aCardToDiscard);
 		deck.discard(removeCardFromHand(aCardToDiscard));
 	}
 
@@ -1021,8 +1030,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
      */
 	public void gain(DomCard aCard) {
 		if (aCard != null) {
-			if (DomEngine.haveToLog)
-				DomEngine.addToLog(this + " gains a " + aCard);
+			if (getLogHandler().getHaveToLog())
+				getLogHandler().addToLog(this + " gains a " + aCard);
 			deck.gain(aCard);
 		}
 	}
@@ -1045,8 +1054,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	public void trash(DomCard aRemove) {
 		if (aRemove != null) {
 			if (aRemove.owner == null || possessor == null) {
-				if (DomEngine.haveToLog)
-					DomEngine.addToLog(this + " trashes a " + aRemove);
+				if (getLogHandler().getHaveToLog())
+					getLogHandler().addToLog(this + " trashes a " + aRemove);
 				game.addToTrash(aRemove);
 			}
 			if (aRemove.owner != null) {
@@ -1141,8 +1150,9 @@ public class DomPlayer implements Comparable<DomPlayer> {
 								.countVictoryPoints()
 						&& countVictoryPoints() + theCard.getVictoryValue(this) > thePlayer
 								.countVictoryPoints()) {
-					if (DomEngine.haveToLog)
-						DomEngine.addToLog("Penultimate Province Rule!!!");
+					if (getLogHandler().getHaveToLog())
+						getLogHandler()
+								.addToLog("Penultimate Province Rule!!!");
 					return true;
 				}
 			}
@@ -1156,8 +1166,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 
 	public void addVP(int aI) {
 		victoryTokens += aI;
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " gains +" + aI + "&#x25BC;");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(this + " gains +" + aI + "&#x25BC;");
 	}
 
 	public void handleGameEnd() {
@@ -1167,28 +1177,29 @@ public class DomPlayer implements Comparable<DomPlayer> {
 
 	public boolean checkDefense() {
 		while (!getCardsFromHand(DomCardName.Horse_Traders).isEmpty()) {
-			if (DomEngine.haveToLog)
-				DomEngine.addToLog(this + " sets a "
-						+ DomCardName.Horse_Traders.toHTML() + " aside");
+			if (getLogHandler().getHaveToLog())
+				getLogHandler().addToLog(
+						this + " sets a " + DomCardName.Horse_Traders.toHTML()
+								+ " aside");
 			horseTradersPile.add(removeCardFromHand(getCardsFromHand(
 					DomCardName.Horse_Traders).get(0)));
 		}
 		if (!getCardsFromHand(DomCardName.Secret_Chamber).isEmpty()) {
 			((Secret_ChamberCard) getCardsFromHand(DomCardName.Secret_Chamber)
-					.get(0)).react();
+					.get(0)).react(getLogHandler());
 		}
 		for (DomCard theCard : cardsInPlay) {
 			if (theCard.getName() == DomCardName.Lighthouse) {
-				if (DomEngine.haveToLog)
-					DomEngine.addToLog(theCard + " prevents the attack!");
+				if (getLogHandler().getHaveToLog())
+					getLogHandler().addToLog(theCard + " prevents the attack!");
 				return true;
 			}
 		}
 		if (!getCardsFromHand(DomCardName.Moat).isEmpty()) {
-			if (DomEngine.haveToLog)
-				DomEngine.addToLog(this + " reveals a "
-						+ DomCardName.Moat.toHTML()
-						+ " from hand and prevents the attack");
+			if (getLogHandler().getHaveToLog())
+				getLogHandler().addToLog(
+						this + " reveals a " + DomCardName.Moat.toHTML()
+								+ " from hand and prevents the attack");
 			return true;
 		}
 		return false;
@@ -1207,8 +1218,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	}
 
 	public void discard(DomCard aCard) {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " discards " + aCard);
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(this + " discards " + aCard);
 		deck.discard(aCard);
 	}
 
@@ -1230,8 +1241,9 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	}
 
 	public void returnToSupply(DomCard aCard) {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " returns " + aCard + " to the supply");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + " returns " + aCard + " to the supply");
 		getCurrentGame().returnToSupply(aCard);
 	}
 
@@ -1260,7 +1272,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 		ArrayList<DomCard> theTradersInHand = getCardsFromHand(DomCardName.Trader);
 		if (theTradersInHand.size() > 0) {
 			if (((TraderCard) theTradersInHand.get(0)).wantsToReact(aCard)) {
-				return ((TraderCard) theTradersInHand.get(0)).react(aCard);
+				return ((TraderCard) theTradersInHand.get(0)).react(aCard,
+						getLogHandler());
 			}
 		}
 		return false;
@@ -1271,28 +1284,28 @@ public class DomPlayer implements Comparable<DomPlayer> {
 		if (theWatchTowersInHand.size() > 0) {
 			if (((WatchtowerCard) theWatchTowersInHand.get(0))
 					.wantsToReact(aCard)) {
-				return ((WatchtowerCard) theWatchTowersInHand.get(0))
-						.react(aCard);
+				return ((WatchtowerCard) theWatchTowersInHand.get(0)).react(
+						aCard, getLogHandler());
 			}
 		}
 		return false;
 	}
 
 	public void addAvailableBuys(int aI) {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " gets +" + aI + " buys");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(this + " gets +" + aI + " buys");
 		buysLeft += aI;
 	}
 
 	public void addAvailableCoins(int aI) {
-		if (DomEngine.haveToLog && aI > 0)
-			DomEngine.addToLog(this + " gets +$" + aI);
+		if (getLogHandler().getHaveToLog() && aI > 0)
+			getLogHandler().addToLog(this + " gets +$" + aI);
 		availableCoins += aI;
 	}
 
 	public void addActions(int aI) {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " gets +" + aI + " actions");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(this + " gets +" + aI + " actions");
 		actionsLeft += aI;
 	}
 
@@ -1338,9 +1351,10 @@ public class DomPlayer implements Comparable<DomPlayer> {
 					theMasqueradePlayer);
 		}
 		if (aCardToPass != null) {
-			if (DomEngine.haveToLog)
-				DomEngine.addToLog(this + " passes a " + aCardToPass + " to "
-						+ theOpponentToTheLeft);
+			if (getLogHandler().getHaveToLog())
+				getLogHandler().addToLog(
+						this + " passes a " + aCardToPass + " to "
+								+ theOpponentToTheLeft);
 			removePhysicalCard(aCardToPass);
 			theOpponentToTheLeft.receiveCard(aCardToPass);
 		}
@@ -1376,8 +1390,9 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	 * @param aRemoveCardFromHand
 	 */
 	public void moveToIslandMat(DomCard aCard) {
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " adds " + aCard + " to the Island Mat");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + " adds " + aCard + " to the Island Mat");
 		deck.moveToIslandMat(aCard);
 	}
 
@@ -1394,9 +1409,9 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	 */
 	public void putOnTopOfDeck(DomCard aDomCard) {
 		deck.putOnTopOfDeck(aDomCard);
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " puts " + aDomCard
-					+ " on top of the deck");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + " puts " + aDomCard + " on top of the deck");
 	}
 
 	public ArrayList<DomCard> collectAllCards() {
@@ -1415,9 +1430,10 @@ public class DomPlayer implements Comparable<DomPlayer> {
      */
 	public void increaseCoppersmithCount() {
 		coppersmithCount++;
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + "'s Coppers are now worth $"
-					+ (coppersmithCount + 1));
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + "'s Coppers are now worth $"
+							+ (coppersmithCount + 1));
 	}
 
 	/**
@@ -1459,10 +1475,11 @@ public class DomPlayer implements Comparable<DomPlayer> {
 			buyRules.add(buyRule);
 		}
 	}
+
 	public void addBuyRules(List<DomBuyRule> buyRules) {
-		buyRules.forEach(x->addBuyRule(x));
+		buyRules.forEach(x -> addBuyRule(x));
 	}
-		
+
 	public DomPlayer getCopy(String aName) {
 		DomPlayer theCopy = new DomPlayer(aName);
 		theCopy.buyRules = new ArrayList<>(buyRules);
@@ -1701,8 +1718,8 @@ public class DomPlayer implements Comparable<DomPlayer> {
 	 * @param aPotionValue
 	 */
 	public void addAvailablePotion(int aPotionValue) {
-		if (DomEngine.haveToLog && aPotionValue > 0)
-			DomEngine.addToLog(this + " gets +" + aPotionValue + "P");
+		if (getLogHandler().getHaveToLog() && aPotionValue > 0)
+			getLogHandler().addToLog(this + " gets +" + aPotionValue + "P");
 		availablePotions += aPotionValue;
 	}
 
@@ -1775,15 +1792,16 @@ public class DomPlayer implements Comparable<DomPlayer> {
      */
 	public void increasePirateShipLevel() {
 		pirateShipLevel++;
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + "'s Pirate Ships now worth $"
-					+ pirateShipLevel);
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + "'s Pirate Ships now worth $" + pirateShipLevel);
 	}
 
 	public void putInHand(DomCard aCard) {
 		getCardsInHand().add(aCard);
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " adds the " + aCard + " to his hand");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + " adds the " + aCard + " to his hand");
 	}
 
 	public void putDeckInDiscard() {
@@ -1881,9 +1899,9 @@ public class DomPlayer implements Comparable<DomPlayer> {
 
 	public void putOnBottomOfDeck(DomCard theBottomCard) {
 		deck.putCardOnBottomOfDeck(theBottomCard);
-		if (DomEngine.haveToLog)
-			DomEngine.addToLog(this + " puts " + theBottomCard
-					+ " on the bottom");
+		if (getLogHandler().getHaveToLog())
+			getLogHandler().addToLog(
+					this + " puts " + theBottomCard + " on the bottom");
 	}
 
 	public void addPossessionTurn(DomPlayer owner) {

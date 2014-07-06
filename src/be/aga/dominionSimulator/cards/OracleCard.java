@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class OracleCard extends DomCard {
@@ -12,7 +13,7 @@ public class OracleCard extends DomCard {
       super( DomCardName.Oracle);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       oracleYourself();
       oracleOpponents();
       owner.drawCards(2);

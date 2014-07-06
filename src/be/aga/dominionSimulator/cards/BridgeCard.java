@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class BridgeCard extends DomCard {
@@ -9,7 +10,7 @@ public class BridgeCard extends DomCard {
       super( DomCardName.Bridge);
     }
 
-    public void play() {        
+    public void play(LogHandler logHandler) {        
       owner.addAvailableBuys(1);
       owner.addAvailableCoins(1);
       owner.getCurrentGame().increaseBridgeCount();

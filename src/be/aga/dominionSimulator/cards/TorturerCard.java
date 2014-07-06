@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -13,15 +14,15 @@ public class TorturerCard extends DomCard {
       super( DomCardName.Torturer);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.drawCards(3);
       for (DomPlayer thePlayer : owner.getOpponents()) {
           if (thePlayer.checkDefense()) 
          	continue;
 	      boolean trashCardPresent=false;
 	      if (owner.getCurrentGame().countInSupply(DomCardName.Curse )==0){
-	         if (DomEngine.haveToLog) 
-	           DomEngine.addToLog( thePlayer + " chooses to gain a Curse because the Curse pile is empty");
+	         if (logHandler.getHaveToLog()) 
+	           logHandler.addToLog( thePlayer + " chooses to gain a Curse because the Curse pile is empty");
 	         continue;
 	      }
 	      ArrayList<DomCard> cardsInHand = thePlayer.getCardsInHand();

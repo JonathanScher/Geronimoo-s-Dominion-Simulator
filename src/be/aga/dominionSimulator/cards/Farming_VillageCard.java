@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -11,7 +12,7 @@ public class Farming_VillageCard extends DomCard {
       super( DomCardName.Farming_Village);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(2);
       ArrayList<DomCard> theRevealedCards = owner.revealUntilActionOrTreasure();
       for (DomCard theCard : theRevealedCards) {

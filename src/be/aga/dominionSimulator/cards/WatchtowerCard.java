@@ -1,7 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
-import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class WatchtowerCard extends DrawUntilXCardsCard {
@@ -11,12 +11,12 @@ public class WatchtowerCard extends DrawUntilXCardsCard {
       super( DomCardName.Watchtower);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.drawCards( 6 - owner.getCardsInHand().size() );
     }
 
-    public boolean react(DomCard aCard) {
-       if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + this );
+    public boolean react(DomCard aCard, LogHandler logHandler) {
+       if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " reveals " + this );
        lastWatchtoweredCard = aCard;
        if (aCard.getName().getTrashPriority(owner)<16) {
          owner.trash( aCard );

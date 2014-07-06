@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class MasqueradeCard extends DomCard {
@@ -11,7 +12,7 @@ public class MasqueradeCard extends DomCard {
       super( DomCardName.Masquerade);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.drawCards(2);
       if (!owner.getOpponents().isEmpty()) {
         owner.passCardToTheLeftForMasquerade(owner.chooseCardToPass(),owner);
@@ -23,7 +24,7 @@ public class MasqueradeCard extends DomCard {
       if (theCardToTrash.getTrashPriority() < 16 && !owner.removingReducesBuyingPower( theCardToTrash )) {
         owner.trash(owner.removeCardFromHand( theCardToTrash));
       } else {
-        if (DomEngine.haveToLog ) DomEngine.addToLog( owner + " trashes nothing");
+        if (logHandler.getHaveToLog() ) logHandler.addToLog( owner + " trashes nothing");
       }
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
 
@@ -12,7 +13,7 @@ public class ApothecaryCard extends DomCard {
       super( DomCardName.Apothecary);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(1);
       owner.drawCards(1);
       ArrayList<DomCard> theRevealedCards = owner.revealTopCards( 4 );

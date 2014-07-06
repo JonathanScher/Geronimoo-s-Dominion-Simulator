@@ -6,6 +6,7 @@ import java.util.Collections;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class BishopCard extends DomCard {
@@ -13,7 +14,7 @@ public class BishopCard extends DomCard {
       super( DomCardName.Bishop);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addAvailableCoins( 1 );
       owner.addVP( 1);
       DomCard theCardToTrash = null;
@@ -28,7 +29,7 @@ public class BishopCard extends DomCard {
         if (theCardToTrash.getCost(owner.getCurrentGame()).getCoins()>0)
           owner.addVP(theCardToTrash.getCost(owner.getCurrentGame()).getCoins()/2);
       }
-      handleOpponents();
+      handleOpponents(logHandler);
     }
 
 	private DomCard findCardToTrash() {
@@ -46,7 +47,7 @@ public class BishopCard extends DomCard {
       return theCardToTrash;
 	}
 
-	private void handleOpponents() {
+	private void handleOpponents(LogHandler logHandler) {
 		for (DomPlayer thePlayer : owner.getOpponents()) {
 		    boolean trashes=false;
 		    if (thePlayer.getCardsInHand().size()>0) {
@@ -59,7 +60,7 @@ public class BishopCard extends DomCard {
 		        }
 		      }
 		    }
-		    if (DomEngine.haveToLog && !trashes) DomEngine.addToLog( thePlayer + " trashes nothing");
+		    if (logHandler.getHaveToLog() && !trashes) logHandler.addToLog( thePlayer + " trashes nothing");
 		  }
 	}
 

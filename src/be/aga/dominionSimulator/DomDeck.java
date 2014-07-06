@@ -11,7 +11,9 @@ import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
 public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
-    protected static final Logger LOGGER = Logger.getLogger( DomDeck.class );
+	private static final long serialVersionUID = 1079165750640964082L;
+
+	protected static final Logger LOGGER = Logger.getLogger( DomDeck.class );
 
     private ArrayList< DomCard > drawDeck = new ArrayList< DomCard >();
     private final ArrayList< DomCard > discardPile = new ArrayList< DomCard >();
@@ -38,7 +40,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
 	  	  doOverhandShuffle();
   	    else
           Collections.shuffle( drawDeck );
-      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " shuffles deck" );
+      if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " shuffles deck" );
 	  if (count(DomCardName.Stash)>0)
         handleStash();
     }
@@ -158,7 +160,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
 		  return;
 		if (aLocation==HAND){
 	      owner.getCardsInHand().add( aCard );
-	      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " gains a " + aCard + " in hand" );
+	      if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " gains a " + aCard + " in hand" );
 		}
 		if (aLocation==TOP_OF_DECK){
 		  owner.putOnTopOfDeck(aCard);      	
@@ -200,7 +202,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
         for (int i = 0; i< theTotalDeckSize;i++){
           DomCard theCard = getTopCard();
           theTopCards.add(theCard);
-          if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + theCard );
+          if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " reveals " + theCard );
           if (theCard.hasCardType( aType ))
             break;
         }
@@ -213,18 +215,18 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
     public void discardTopCardFromDeck() {
       DomCard theCard = null;
       if (drawDeck.isEmpty()) {
-        if (DomEngine.haveToLog) DomEngine.addToLog( owner + " has no cards in the deck to discard");
+        if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " has no cards in the deck to discard");
         return;
       }
       theCard = getTopCard();
-      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " discards " + theCard + " from the top of his deck");
+      if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " discards " + theCard + " from the top of his deck");
       discard( theCard);
     }
 
     private boolean checkPossessed(DomCard aCard) {
         if (owner.possessor!=null) {
-          if (DomEngine.haveToLog) 
-            DomEngine.addToLog( owner + " is Possessed by " + owner.possessor + " who will gain " + aCard);
+          if (getLogHandler().getHaveToLog()) 
+            getLogHandler().addToLog( owner + " is Possessed by " + owner.possessor + " who will gain " + aCard);
           owner.possessor.gain(aCard);
           return true;
         }
@@ -237,11 +239,11 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
         for (int i = 0; i<aI && i< theTotalDeckSize;i++){
           theTopX.add(getTopCard());
         }
-        if (DomEngine.haveToLog) {
+        if (getLogHandler().getHaveToLog()) {
             if (theTopX.isEmpty()) {
-              DomEngine.addToLog( owner + " reveals nothing" );
+              getLogHandler().addToLog( owner + " reveals nothing" );
             } else {
-              DomEngine.addToLog( owner + " reveals " + theTopX );
+              getLogHandler().addToLog( owner + " reveals " + theTopX );
             }
         }
         return theTopX;
@@ -290,7 +292,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
     }
 
     private void putCardAside(DomCard aRemove) {
-      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " puts aside "+aRemove );
+      if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " puts aside "+aRemove );
 	  putAsideCards.add(aRemove);
 	}
 
@@ -298,7 +300,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
      * 
      */
     public void showContents() {
-        if (!DomEngine.haveToLog)
+        if (!getLogHandler().getHaveToLog())
           return;
             
         StringBuilder theMessage=null;
@@ -316,7 +318,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
         }
         theMessage.append( "]" );
         
-        DomEngine.addToStartOfLog(theMessage.toString());
+        getLogHandler().addToStartOfLog(theMessage.toString());
     }
 
     /**
@@ -367,7 +369,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
      * 
      */
     public void returnCardsFromIslandMat() {
-      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " returns all cards from the Island Mat: " + getIslandMat() );
+      if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " returns all cards from the Island Mat: " + getIslandMat() );
       for (DomCard theCard : islandMat) {
         get(theCard.getName()).add( theCard );
         theCard.setOwner(owner);
@@ -403,7 +405,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
     } 
 
 	public void putDeckInDiscard() {
-        if (DomEngine.haveToLog) DomEngine.addToLog( owner + " discards entire deck" );
+        if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " discards entire deck" );
     	discardPile.addAll(drawDeck);
 		drawDeck.clear();
 		owner.setKnownTopCards(0);
@@ -445,7 +447,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
         for (int i = 0; i< theTotalDeckSize;i++){
           DomCard theCard = getTopCard();
           theTopCards.add(theCard);
-          if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + theCard );
+          if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " reveals " + theCard );
           if (theCard.getCoinCost(owner.getCurrentGame())>=aCost)
             break;
         }
@@ -485,7 +487,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
         for (int i = 0; i< theTotalDeckSize;i++){
           DomCard theCard = getTopCard();
           theTopCards.add(theCard);
-          if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + theCard );
+          if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " reveals " + theCard );
           if (theCard.hasCardType( DomCardType.Victory) || theCard.hasCardType(DomCardType.Curse))
             break;
         }
@@ -498,7 +500,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
         for (int i = 0; i< theTotalDeckSize;i++){
           DomCard theCard = getTopCard();
           theTopCards.add(theCard);
-          if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + theCard );
+          if (getLogHandler().getHaveToLog()) getLogHandler().addToLog( owner + " reveals " + theCard );
           if (theCard.hasCardType( DomCardType.Action) || theCard.hasCardType(DomCardType.Treasure))
             break;
         }
@@ -579,5 +581,9 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
 	 	  && owner.getforcedStart()==43)
 		  return true;
 		return false;
+	}
+	
+	public LogHandler getLogHandler(){
+		return owner.getLogHandler();
 	}
 }

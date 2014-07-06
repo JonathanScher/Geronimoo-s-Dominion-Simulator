@@ -6,6 +6,7 @@ import java.util.Collections;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -14,7 +15,7 @@ public class Secret_ChamberCard extends DomCard {
       super( DomCardName.Secret_Chamber);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (owner.getActionsLeft()>0 
       && !owner.getCardsFromHand(DomCardName.Tactician).isEmpty() 
       && owner.getCardsInHand().size()>=2) {
@@ -38,8 +39,8 @@ public class Secret_ChamberCard extends DomCard {
 		  } while (!owner.getCardsInHand().isEmpty());
 	}
 
-    public void react() {
-       if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + this );
+    public void react(LogHandler logHandler) {
+       if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " reveals " + this );
        owner.drawCards(2);
        for (DomPlayer player : owner.getOpponents()){
     	   if (!player.getCardsFromPlay(DomCardName.Mountebank).isEmpty()){

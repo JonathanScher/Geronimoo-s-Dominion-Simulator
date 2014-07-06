@@ -16,6 +16,7 @@ import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomGame;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.gai.factory.BotFactory;
 import be.aga.dominionSimulator.gai.factory.BuyRuleListFactory;
@@ -124,7 +125,7 @@ public class Main {
 		List<Integer> player2VictoryPoints = new ArrayList<>();
 		List<Double> ratio = new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
-			DomGame theGame = new DomGame(null, players);
+			DomGame theGame = new DomGame(null, players, new LogHandler());
 			theGame.run();
 			player1VictoryPoints.add(player1.countVictoryPoints());
 			player2VictoryPoints.add(player2.countVictoryPoints());

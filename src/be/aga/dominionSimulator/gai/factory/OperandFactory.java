@@ -30,7 +30,7 @@ public class OperandFactory {
 			function = DomBotFunction.constant;
 		} else {
 //			function = functionFactory.generateRandomBotFunction(rand);
-			function = DomBotFunction.countCardsInDeck;
+			function = DomBotFunction.constant;
 		}
 		operand.setFunction(function);
 

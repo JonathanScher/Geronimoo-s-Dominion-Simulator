@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Mining_VillageCard extends DomCard {
@@ -10,7 +11,7 @@ public class Mining_VillageCard extends DomCard {
       super( DomCardName.Mining_Village);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions( 2 );
       owner.drawCards( 1 );
       posibblyTrashThis();

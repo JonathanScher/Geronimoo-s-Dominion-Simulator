@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class UpgradeCard extends DomCard {
@@ -11,7 +12,7 @@ public class UpgradeCard extends DomCard {
       super( DomCardName.Upgrade);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
         owner.addActions( 1 );
         owner.drawCards( 1 );
         if (owner.getCardsInHand().isEmpty())

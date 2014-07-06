@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class EnvoyCard extends DomCard {
@@ -11,7 +12,7 @@ public class EnvoyCard extends DomCard {
       super( DomCardName.Envoy);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       ArrayList<DomCard> theRevealedCards = owner.revealTopCards( 5 );
       discardBestCard(theRevealedCards);
       owner.getCardsInHand().addAll(theRevealedCards);

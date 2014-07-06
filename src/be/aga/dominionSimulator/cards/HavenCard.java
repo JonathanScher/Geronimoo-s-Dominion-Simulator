@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -15,7 +16,7 @@ public class HavenCard extends DomCard {
       super( DomCardName.Haven);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(1);
       owner.drawCards(1);
       if (owner.getCardsInHand().isEmpty())
@@ -24,7 +25,7 @@ public class HavenCard extends DomCard {
       ArrayList< DomCard > theTerminalsInHand = owner.getCardsFromHand( DomCardType.Terminal );
       Collections.sort(theTerminalsInHand, DomCard.SORT_FOR_DISCARD_FROM_HAND);
       if (owner.getProbableActionsLeft()<0) {
-        havenAway(theTerminalsInHand.get(0));
+        havenAway(theTerminalsInHand.get(0), logHandler);
 		return;
       }
       //TODO now Haven will try to stow away the best treasure card, but more handling is probably needed
@@ -33,25 +34,25 @@ public class HavenCard extends DomCard {
           DomCard theCardToHavenAway = owner.getCardsInHand().get( i );
           if (theCardToHavenAway.hasCardType(DomCardType.Treasure)
         		  && !owner.removingReducesBuyingPower( theCardToHavenAway )) {
-            havenAway(theCardToHavenAway );
+            havenAway(theCardToHavenAway, logHandler );
             return;
           }
       }
       //nothing found to put away so put away the worst card
-      havenAway(owner.getCardsInHand().get( 0 ) );
+      havenAway(owner.getCardsInHand().get( 0 ), logHandler);
     }
 
-	private void havenAway(DomCard aCard) {
+	private void havenAway(DomCard aCard, LogHandler logHandler) {
 		myHavenedCard=owner.removeCardFromHand( aCard);
-        if (DomEngine.haveToLog ) DomEngine.addToLog( owner + " puts " + myHavenedCard + " aside");
+        if (logHandler.getHaveToLog() ) logHandler.addToLog( owner + " puts " + myHavenedCard + " aside");
 	}
 
-    public void resolveDuration() {
+    public void resolveDuration(LogHandler logHandler) {
       if (myHavenedCard!=null) {
     	owner.putInHand(myHavenedCard);
     	owner.showHand();
       } else {
-        if (DomEngine.haveToLog ) DomEngine.addToLog( owner + " adds nothing to his hand");
+        if (logHandler.getHaveToLog() ) logHandler.addToLog( owner + " adds nothing to his hand");
       }
       myHavenedCard=null;
     }

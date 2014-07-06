@@ -8,9 +8,9 @@ import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import be.aga.dominionSimulator.DomBoard;
 import be.aga.dominionSimulator.DomBuyRule;
-import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomGame;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 
 public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 
@@ -49,7 +49,7 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 			if (!keepOrder) {
 				Collections.shuffle(players);
 			}
-			DomGame theGame = new DomGame(theBoard, players);
+			DomGame theGame = new DomGame(theBoard, players, new LogHandler());
 			theGame.run();
 			theGame.determineWinners();
 			ratio.add(Double.valueOf(candidatePlayer.countVictoryPoints())

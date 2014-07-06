@@ -21,13 +21,15 @@ public class DomGame {
 	private int quarryCount = 0;
 	private DomPlayer activePlayer;
 	public boolean emptyPilesEnding = false;
+	private LogHandler logHandler = new LogHandler();
 
 	/**
 	 * @param aPlayers
 	 * @param aGameType
 	 * @param aforce43Start
 	 */
-	public DomGame(DomBoard aBoard, List<DomPlayer> aPlayers) {
+	public DomGame(DomBoard aBoard, List<DomPlayer> aPlayers, LogHandler logHandler) {
+		this.logHandler = logHandler;
 		players.addAll(aPlayers);
 		if (aBoard == null) {
 			board = new DomBoard(DomCardName.class, players);
@@ -75,7 +77,7 @@ public class DomGame {
 		int turn = 0;
 		do {
 			turn++;
-			DomEngine.logPlayerIndentation = 0;
+			logHandler.setLogPlayerIndentation(0);
 			for (int i = 0; i < players.size() && !isGameFinished(); i++) {
 				activePlayer = players.get(i);
 				theTime = System.currentTimeMillis();
@@ -96,10 +98,10 @@ public class DomGame {
 					activePlayer.takeTurn();
 				}
 				playerTurnTime += System.currentTimeMillis() - theTime;
-				DomEngine.logPlayerIndentation++;
+				logHandler.increaselogPlayerIndentation();
 			}
 		} while (!isGameFinished());
-		DomEngine.logPlayerIndentation = 0;
+		logHandler.setLogPlayerIndentation(0);
 	}
 
 	public void determineWinners() {
@@ -111,11 +113,11 @@ public class DomGame {
 			thePlayer.handleGameEnd();
 		}
 		for (DomPlayer thePlayer : players) {
-			if (DomEngine.haveToLog)
-				DomEngine.addToStartOfLog("");
+			if (logHandler.getHaveToLog())
+				logHandler.addToStartOfLog("");
 			thePlayer.showDeck();
-			if (DomEngine.haveToLog)
-				DomEngine.addToStartOfLog("<B>"
+			if (logHandler.getHaveToLog())
+				logHandler.addToStartOfLog("<B>"
 						+ thePlayer
 						+ "</B> has "
 						+ thePlayer.countVictoryPoints()
@@ -139,20 +141,20 @@ public class DomGame {
 				winners++;
 			}
 		}
-		if (DomEngine.haveToLog)
-			DomEngine.addToStartOfLog("");
+		if (logHandler.getHaveToLog())
+			logHandler.addToStartOfLog("");
 		for (DomPlayer thePlayer : players) {
 			if (thePlayer.countVictoryPoints() >= theMaxPoints
 					&& thePlayer.getTurns() <= theMinTurns) {
 				if (winners > 1) {
-					if (DomEngine.haveToLog)
-						DomEngine.addToStartOfLog(thePlayer
+					if (logHandler.getHaveToLog())
+						logHandler.addToStartOfLog(thePlayer
 								+ " ties for the win !!");
 					// if (players.get(0).pprUsed)
 					thePlayer.addTie();
 				} else {
-					if (DomEngine.haveToLog)
-						DomEngine.addToStartOfLog(thePlayer
+					if (logHandler.getHaveToLog())
+						logHandler.addToStartOfLog(thePlayer
 								+ " wins this game!!");
 					// if (players.get(0).pprUsed)
 					thePlayer.addWin();
@@ -190,9 +192,9 @@ public class DomGame {
 		}
 
 		if (board.countEmptyPiles() >= 3) {
-			if (DomEngine.haveToLog) {
-				DomEngine.addToLog("");
-				DomEngine.addToLog("Three piles depleted!");
+			if (logHandler.getHaveToLog()) {
+				logHandler.addToLog("");
+				logHandler.addToLog("Three piles depleted!");
 			}
 			checkGameFinishTime += System.currentTimeMillis() - theTime;
 			emptyPilesEnding = true;
@@ -357,5 +359,9 @@ public class DomGame {
 
 	public DomPlayer getActivePlayer() {
 		return activePlayer;
+	}
+
+	public LogHandler getLogHandler() {
+		return logHandler;
 	}
 }

@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class EmbassyCard extends DomCard {
@@ -10,7 +11,7 @@ public class EmbassyCard extends DomCard {
     }
 
     @Override
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.drawCards( 5 );
       owner.doForcedDiscard(3, false);
     }

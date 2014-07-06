@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -12,7 +13,7 @@ public class TributeCard extends DomCard {
       super( DomCardName.Tribute);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (owner.getOpponents().isEmpty())
     	return;
       DomPlayer theLeftPlayer = owner.getOpponents().get(0);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
-import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -16,7 +16,7 @@ public class MultiplicationCard extends DomCard {
 	  super(aCardName);
 	}
 	
-	public void play(){
+	public void play(LogHandler logHandler){
 	  cleanDurationsFromPreviousGames();
       DomCard theCardToMultiply = getCardToMultiply();
       if (theCardToMultiply == null)
@@ -28,12 +28,12 @@ public class MultiplicationCard extends DomCard {
       }
       owner.removeCardFromHand(theCardToMultiply);
       owner.getCardsInPlay().add(theCardToMultiply);
-      play(theCardToMultiply, 1);
+      play(theCardToMultiply, 1, logHandler);
       //little fix for Tactician
       if (theCardToMultiply.getName()!=DomCardName.Tactician){
-	      play(theCardToMultiply, 2);
+	      play(theCardToMultiply, 2, logHandler);
 	      if (getName()==DomCardName.King$s_Court) {
-	        play(theCardToMultiply, 3);
+	        play(theCardToMultiply, 3, logHandler);
 	      }
       }
    }
@@ -50,34 +50,34 @@ public class MultiplicationCard extends DomCard {
 	  }
 	}
 
-	private void play(DomCard theCardToMultiply, int i ) {
+	private void play(DomCard theCardToMultiply, int i, LogHandler logHandler ) {
 		String aLogAppend = " with the " + this;
 		if (i==2) 
 		  aLogAppend = " again";
 		if (i==3) 
 	      aLogAppend = " a third time";
 		owner.increaseActionsPlayed();
-		if (DomEngine.haveToLog ) {
-		  DomEngine.addToLog( owner + " plays " + theCardToMultiply + aLogAppend);
-		  DomEngine.logIndentation++;
+		if (logHandler.getHaveToLog() ) {
+		  logHandler.addToLog( owner + " plays " + theCardToMultiply + aLogAppend);
+		  logHandler.increaseLogIndentation();
 		}
 		if (i>1){
-  		  playSecondTime(theCardToMultiply);
+  		  playSecondTime(theCardToMultiply, logHandler);
 		}else {
-		  theCardToMultiply.play();
+		  theCardToMultiply.play(logHandler);
 		}
-		if (DomEngine.haveToLog ) {
-  		  DomEngine.logIndentation--;
+		if (logHandler.getHaveToLog() ) {
+  		  logHandler.decreaseLogIndentation();
 		}
 	}
 	    
-    private void playSecondTime(DomCard theCardToMultiply) {
+    private void playSecondTime(DomCard theCardToMultiply, LogHandler logHandler) {
         switch (theCardToMultiply.getName()) {
         case Feast:
           //fix for Feast which gets trashed and causes null pointer when played a second time
           DomCardName theDesiredCard = owner.getDesiredCard(new DomCost( 5, 0), false);
 		  if (theDesiredCard==null) {
-		    if (DomEngine.haveToLog) DomEngine.addToLog("but gains nothing");
+		    if (logHandler.getHaveToLog()) logHandler.addToLog("but gains nothing");
 		  } else {
 			owner.gain(theDesiredCard);
 		  }
@@ -102,12 +102,12 @@ public class MultiplicationCard extends DomCard {
         }
 	}
 
-	public void resolveDuration() {
+	public void resolveDuration(LogHandler logHandler) {
       for (DomCard card : myDurationCards) {
-    	if (DomEngine.haveToLog) DomEngine.addToLog( owner + " played " +card + " with "+ this);
+    	if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " played " +card + " with "+ this);
 	    card.resolveDuration();
 	    if (getName()==DomCardName.King$s_Court){
-	      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " played " +card + " with "+ this);
+	      if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " played " +card + " with "+ this);
 		  card.resolveDuration();
 	    }
       }

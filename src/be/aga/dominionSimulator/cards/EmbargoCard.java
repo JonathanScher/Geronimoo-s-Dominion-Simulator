@@ -4,6 +4,7 @@ import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class EmbargoCard extends DomCard {
@@ -11,7 +12,7 @@ public class EmbargoCard extends DomCard {
       super( DomCardName.Embargo);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addAvailableCoins(2);
       for (DomPlayer thePlayer : owner.getOpponents()) {
     	  //run through the buy rules of all opponents until we find a card that is not in our buy rules 
@@ -29,22 +30,22 @@ public class EmbargoCard extends DomCard {
 //	  && thePlayer.getDesiredCard(theCardToBuy.getCost(thePlayer), false)==theCardToBuy
     		   && owner.getCurrentGame().getEmbargoTokensOn(theCardToBuy)==0
     		   && owner.getCurrentGame().countInSupply(theCardToBuy)>0) {
-    			putEmbargoTokenOn(theRule.getCardToBuy());
+    			putEmbargoTokenOn(theRule.getCardToBuy(), logHandler);
     			return;
     		  }
     	  }
       }
       //if no suitable card found, just embargo a previously Embargoed card or a Curse
-      putEmbargoTokenOn(owner.getCurrentGame().getBoard().getRandomCardWithEmbargoToken());
+      putEmbargoTokenOn(owner.getCurrentGame().getBoard().getRandomCardWithEmbargoToken(), logHandler);
     }
 
-	private void putEmbargoTokenOn(DomCardName cardToBuy) {
+	private void putEmbargoTokenOn(DomCardName cardToBuy, LogHandler logHandler) {
 		//trashing makes owner=null, so make a local variable
 		DomPlayer theOwner = owner;
         if (owner.getCardsInPlay().contains(this))
           owner.trash(owner.removeCardFromPlay(this));
 		theOwner.getCurrentGame().putEmbargoTokenOn(cardToBuy);
-        if (DomEngine.haveToLog) 
-	      DomEngine.addToLog( theOwner + " puts an Embargo Token on " + cardToBuy.toHTML());
+        if (logHandler.getHaveToLog()) 
+	      logHandler.addToLog( theOwner + " puts an Embargo Token on " + cardToBuy.toHTML());
 	}
 }

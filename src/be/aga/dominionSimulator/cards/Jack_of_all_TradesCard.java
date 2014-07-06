@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -13,20 +14,20 @@ public class Jack_of_all_TradesCard extends DrawUntilXCardsCard {
       super( DomCardName.Jack_of_all_Trades);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       gainSilver();
       spyOnYourself();
       drawUntil5CardsInHand();
-      maybeTrashNonTreasureFromHand();
+      maybeTrashNonTreasureFromHand(logHandler);
     }
 
-	private void maybeTrashNonTreasureFromHand() {
+	private void maybeTrashNonTreasureFromHand(LogHandler logHandler) {
 		if (owner.getCardsInHand().isEmpty())
 			  return;
 		  Collections.sort( owner.getCardsInHand(), SORT_FOR_TRASHING);
 		  DomCard theCardToTrash = findCardToTrash();
 		  if (theCardToTrash==null){
-			if (DomEngine.haveToLog) DomEngine.addToLog(owner + " trashes nothing");
+			if (logHandler.getHaveToLog()) logHandler.addToLog(owner + " trashes nothing");
 		  } else{
 			owner.trash(owner.removeCardFromHand(theCardToTrash));
 		  }

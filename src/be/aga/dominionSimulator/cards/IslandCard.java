@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class IslandCard extends DomCard {
@@ -10,7 +11,7 @@ public class IslandCard extends DomCard {
       super( DomCardName.Island);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (!owner.getCardsFromPlay(DomCardName.Island).isEmpty()) {
     	//this is possible if card was throne roomed or king's courted
         owner.moveToIslandMat(owner.removeCardFromPlay(this));

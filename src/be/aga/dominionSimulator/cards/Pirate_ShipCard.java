@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
@@ -15,7 +16,7 @@ public class Pirate_ShipCard extends DomCard {
     }
 
     @Override
-    public void play() {
+    public void play(LogHandler logHandler) {
         if (owner.addingThisIncreasesBuyingPower( new DomCost( owner.getPirateShipLevel(), 0 ) )) {
           if (owner.getPlayStrategyFor(this)!=DomPlayStrategy.attackUntil5Coins || owner.getPirateShipLevel()>=5) {
             owner.addAvailableCoins( owner.getPirateShipLevel());

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class NavigatorCard extends DomCard {
@@ -11,7 +12,7 @@ public class NavigatorCard extends DomCard {
       super( DomCardName.Navigator);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addAvailableCoins(2);
       ArrayList<DomCard> theCards = owner.revealTopCards(5);
       int theTotal=0;

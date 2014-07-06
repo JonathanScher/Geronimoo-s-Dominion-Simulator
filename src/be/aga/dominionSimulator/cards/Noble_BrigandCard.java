@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -12,7 +13,7 @@ public class Noble_BrigandCard extends DomCard {
       super( DomCardName.Noble_Brigand);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	owner.addAvailableCoins(1);
     	attack(owner);
     }

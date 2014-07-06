@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -13,11 +14,11 @@ public class CourtyardCard extends DomCard {
       super( DomCardName.Courtyard);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	owner.drawCards(3);
     	if (owner.getCardsInHand().isEmpty()) {
-  	      if (DomEngine.haveToLog) 
-            DomEngine.addToLog( owner + "'s hand is empty, so returns nothing");
+  	      if (logHandler.getHaveToLog()) 
+            logHandler.addToLog( owner + "'s hand is empty, so returns nothing");
           return;
     	}
     	Collections.sort(owner.getCardsInHand(), SORT_FOR_DISCARD_FROM_HAND);

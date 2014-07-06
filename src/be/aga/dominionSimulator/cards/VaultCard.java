@@ -3,8 +3,8 @@ package be.aga.dominionSimulator.cards;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
-import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class VaultCard extends DomCard {
@@ -12,14 +12,14 @@ public class VaultCard extends DomCard {
       super( DomCardName.Vault);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.drawCards( 2 );
       if (owner.getActionsLeft()>0 && !owner.getCardsFromHand(DomCardName.Tactician).isEmpty() && owner.getCardsInHand().size()>=2) {
     	handleTactician();
       } else {
         playNormal();
       }
-      handleOpponents();
+      handleOpponents(logHandler);
     }
 
 	private void playNormal() {
@@ -34,16 +34,16 @@ public class VaultCard extends DomCard {
 	  } 
 	}
 
-	private void handleOpponents() {
+	private void handleOpponents(LogHandler logHandler) {
       for (DomPlayer thePlayer : owner.getOpponents()) {
     	if (!thePlayer.getCardsFromHand(DomCardName.Vault).isEmpty()) {
     	  //when the opponent has a Vault in hand he will in most cases prefer to keep more cards in hand
-    	  if (DomEngine.haveToLog) DomEngine.addToLog( thePlayer + " discards nothing!" );
+    	  if (logHandler.getHaveToLog()) logHandler.addToLog( thePlayer + " discards nothing!" );
     	  continue;
     	}
     	if (!thePlayer.getCardsFromHand(DomCardName.Trading_Post).isEmpty()) {
           //when the opponent has a Trading Post in hand he will in most cases prefer to keep his garbage in hand
-      	  if (DomEngine.haveToLog) DomEngine.addToLog( thePlayer + " discards nothing!" );
+      	  if (logHandler.getHaveToLog()) logHandler.addToLog( thePlayer + " discards nothing!" );
     	  continue;
       	}
         Collections.sort(thePlayer.getCardsInHand(), SORT_FOR_DISCARDING);
@@ -56,7 +56,7 @@ public class VaultCard extends DomCard {
           thePlayer.discardFromHand(thePlayer.getCardsInHand().get(0));
           thePlayer.drawCards( 1 );
         } else {
-          if (DomEngine.haveToLog) DomEngine.addToLog( thePlayer + " discards nothing!" );
+          if (logHandler.getHaveToLog()) logHandler.addToLog( thePlayer + " discards nothing!" );
         }
       }
 	}

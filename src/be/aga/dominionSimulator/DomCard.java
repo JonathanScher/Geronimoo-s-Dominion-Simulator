@@ -165,10 +165,7 @@ public class DomCard implements Comparable< DomCard >{
       owner = aPlayer;
     }
 
-    /**
-     * 
-     */
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.availableCoins+=getCoinValue();        
       owner.availablePotions+=getPotionValue();        
     }

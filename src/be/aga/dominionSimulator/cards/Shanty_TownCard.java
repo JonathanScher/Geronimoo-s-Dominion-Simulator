@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -9,7 +10,7 @@ public class Shanty_TownCard extends DomCard {
       super( DomCardName.Shanty_Town);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(2);
       owner.showHand();
       if (owner.getCardsFromHand(DomCardType.Action).isEmpty())

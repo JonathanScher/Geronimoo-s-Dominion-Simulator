@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class RemakeCard extends DomCard {
@@ -12,7 +13,7 @@ public class RemakeCard extends DomCard {
       super( DomCardName.Remake);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
         int theTrashCount=0;
         Collections.sort( owner.getCardsInHand(), SORT_FOR_TRASHING);
         while (theTrashCount<2 && !owner.getCardsInHand().isEmpty()) {

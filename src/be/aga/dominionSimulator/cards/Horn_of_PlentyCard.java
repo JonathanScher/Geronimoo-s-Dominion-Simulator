@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -13,15 +14,15 @@ public class Horn_of_PlentyCard extends DomCard {
       super( DomCardName.Horn_of_Plenty);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
   	  ArrayList<DomCardName> theSingleCards = new ArrayList<DomCardName>();
       for (DomCard card : owner.getCardsInPlay()) {
 		if (!theSingleCards.contains(card.getName())){
     	  theSingleCards.add(card.getName());
     	}
       }
-      if (DomEngine.haveToLog) 
-      	DomEngine.addToLog( owner + " has " + theSingleCards.size() + " different cards in play");
+      if (logHandler.getHaveToLog()) 
+      	logHandler.addToLog( owner + " has " + theSingleCards.size() + " different cards in play");
       DomCardName theCardToGain = owner.getDesiredCard(new DomCost(theSingleCards.size(), 0), false);
       if (theCardToGain==null) {
     	//possibly null if played by Venture

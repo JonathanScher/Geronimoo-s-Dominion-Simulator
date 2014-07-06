@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class DevelopCard extends DomCard {
@@ -12,7 +13,7 @@ public class DevelopCard extends DomCard {
       super( DomCardName.Develop);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
         if (owner.getCardsInHand().isEmpty())
         	return;
         Collections.sort( owner.getCardsInHand(), SORT_FOR_TRASHING);

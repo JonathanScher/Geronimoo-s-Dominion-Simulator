@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class MilitiaCard extends DomCard {
@@ -9,7 +10,7 @@ public class MilitiaCard extends DomCard {
       super( DomCardName.Militia);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addAvailableCoins(2);
       for (DomPlayer thePlayer : owner.getOpponents()) {
         if (!thePlayer.checkDefense()) {

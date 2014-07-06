@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Nomad_CampCard extends DomCard {
@@ -8,7 +9,7 @@ public class Nomad_CampCard extends DomCard {
       super( DomCardName.Nomad_Camp);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addAvailableCoins(2);
       owner.addAvailableBuys(1);
     }

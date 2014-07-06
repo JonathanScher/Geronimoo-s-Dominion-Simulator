@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Hunting_PartyCard extends DomCard {
@@ -10,7 +11,7 @@ public class Hunting_PartyCard extends DomCard {
       super( DomCardName.Hunting_Party);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(1);
       owner.drawCards(1);
 //      owner.showHand();

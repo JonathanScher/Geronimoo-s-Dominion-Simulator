@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -10,7 +11,7 @@ public class BankCard extends DomCard {
     }
     
     @Override
-    public void play() {
+    public void play(LogHandler logHandler) {
       int theValue=0;
       for (DomCard theCard : owner.getCardsInPlay()) {
     	theValue+=theCard.hasCardType(DomCardType.Treasure) ? 1 : 0;

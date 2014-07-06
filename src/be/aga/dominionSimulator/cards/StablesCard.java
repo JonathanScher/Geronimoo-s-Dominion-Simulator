@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -12,7 +13,7 @@ public class StablesCard extends DomCard {
       super( DomCardName.Stables);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (!discardTreasureFromHand())
     	  return;
       owner.addActions(1);

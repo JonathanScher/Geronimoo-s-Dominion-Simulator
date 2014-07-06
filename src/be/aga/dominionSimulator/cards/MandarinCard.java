@@ -6,6 +6,7 @@ import java.util.Collections;
 import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -14,11 +15,11 @@ public class MandarinCard extends DomCard {
       super( DomCardName.Mandarin);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	owner.addAvailableCoins(3);
     	if (owner.getCardsInHand().isEmpty()) {
-  	      if (DomEngine.haveToLog) 
-            DomEngine.addToLog( owner + "'s hand is empty, so returns nothing");
+  	      if (logHandler.getHaveToLog()) 
+            logHandler.addToLog( owner + "'s hand is empty, so returns nothing");
           return;
     	}
     	putCardBackOnTopOfDeck();

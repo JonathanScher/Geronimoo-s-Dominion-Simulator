@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class BaronCard extends DomCard {
@@ -8,7 +9,7 @@ public class BaronCard extends DomCard {
       super( DomCardName.Baron);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
         owner.addAvailableBuys( 1 );
         if (owner.discardFromHand(DomCardName.Estate)){
           owner.addAvailableCoins( 4 );

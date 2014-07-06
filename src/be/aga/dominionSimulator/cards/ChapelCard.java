@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
 
@@ -11,7 +12,7 @@ public class ChapelCard extends DomCard {
       super( DomCardName.Chapel);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	int theMin$Indeck = owner.getPlayStrategyFor(this)==DomPlayStrategy.aggressiveTrashing ? 4 : 6;
     	int theTrashOverBuyTreshold = owner.getPlayStrategyFor(this)==DomPlayStrategy.aggressiveTrashing ? 3 : 4;
         int theTrashCount=0;

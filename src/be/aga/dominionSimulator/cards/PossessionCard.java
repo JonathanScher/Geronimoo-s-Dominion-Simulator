@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class PossessionCard extends DomCard {
@@ -8,7 +9,7 @@ public class PossessionCard extends DomCard {
       super( DomCardName.Possession);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	if (!owner.getOpponents().isEmpty())
     	  owner.getOpponents().get(0).addPossessionTurn(owner);
     }

@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -16,7 +17,7 @@ public class HamletCard extends DomCard {
       super( DomCardName.Hamlet);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	reset();
         owner.addActions(1);
         owner.drawCards(1);

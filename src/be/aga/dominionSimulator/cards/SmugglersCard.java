@@ -6,6 +6,7 @@ import java.util.Collections;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class SmugglersCard extends DomCard {
@@ -13,7 +14,7 @@ public class SmugglersCard extends DomCard {
       super( DomCardName.Smugglers);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (owner.getOpponents().isEmpty())
     	return;
       DomPlayer theRightOpponent = owner.getOpponents().get(owner.getOpponents().size()-1);

@@ -5,6 +5,7 @@ import java.util.Collections;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
 
@@ -13,7 +14,7 @@ public class AmbassadorCard extends DomCard {
       super( DomCardName.Ambassador);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	if (owner.getCardsInHand().isEmpty())
           return;
         Collections.sort(owner.getCardsInHand(),SORT_FOR_TRASHING);
@@ -27,7 +28,7 @@ public class AmbassadorCard extends DomCard {
           if (thePreviousTrash!=null && thePreviousTrash.getName()!=theCardToTrash.getName())
             break;
           theRevealedCard = theCardToTrash;
-          if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + theRevealedCard );
+          if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " reveals " + theRevealedCard );
           if ((owner.getPlayStrategyFor(this)!=DomPlayStrategy.aggressiveTrashing
            && owner.removingReducesBuyingPower(theCardToTrash)) 
            || owner.getTotalMoneyInDeck()-theCardToTrash.getPotentialCoinValue() < 3)

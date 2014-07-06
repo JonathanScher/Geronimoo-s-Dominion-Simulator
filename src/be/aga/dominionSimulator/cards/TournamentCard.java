@@ -4,6 +4,7 @@ import be.aga.dominionSimulator.DomBuyRule;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class TournamentCard extends DomCard {
@@ -11,16 +12,16 @@ public class TournamentCard extends DomCard {
       super( DomCardName.Tournament);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(1);
       if (!owner.getCardsFromHand(DomCardName.Province).isEmpty()){
-    	  if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals a "+DomCardName.Province.toHTML()+" and may gain a Prize" );
+    	  if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " reveals a "+DomCardName.Province.toHTML()+" and may gain a Prize" );
     	  gainPrize();
     	  owner.discardFromHand(owner.getCardsFromHand(DomCardName.Province).get(0));
       }
       for (DomPlayer thePlayer : owner.getOpponents()){
         if (!thePlayer.getCardsFromHand(DomCardName.Province).isEmpty()){
-            if (DomEngine.haveToLog) DomEngine.addToLog( thePlayer + " reveals a "+DomCardName.Province.toHTML()+" so "+ owner +" will not get $1 or draw a card" );
+            if (logHandler.getHaveToLog()) logHandler.addToLog( thePlayer + " reveals a "+DomCardName.Province.toHTML()+" so "+ owner +" will not get $1 or draw a card" );
             return;
         }
       }

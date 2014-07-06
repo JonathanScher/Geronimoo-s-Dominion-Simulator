@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -13,7 +14,7 @@ public class RabbleCard extends DomCard {
     }
 
     @Override
-    public void play() {
+    public void play(LogHandler logHandler) {
     	owner.drawCards(3);
         for (DomPlayer thePlayer : owner.getOpponents()) {
             if (thePlayer.checkDefense())

@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import java.util.HashSet;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -11,7 +12,7 @@ public class InnCard extends DomCard {
       super( DomCardName.Inn);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(2);
       owner.drawCards(2);
       owner.doForcedDiscard(2, false);

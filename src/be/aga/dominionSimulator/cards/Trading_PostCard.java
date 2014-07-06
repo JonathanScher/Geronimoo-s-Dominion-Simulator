@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Trading_PostCard extends DomCard {
@@ -11,7 +12,7 @@ public class Trading_PostCard extends DomCard {
       super( DomCardName.Trading_Post);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
         ArrayList<DomCard> cardsInHand = owner.getCardsInHand();
         Collections.sort(cardsInHand,SORT_FOR_TRASHING);
         int i=0;

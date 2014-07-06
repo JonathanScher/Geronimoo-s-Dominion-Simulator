@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class CityCard extends DomCard {
@@ -8,7 +9,7 @@ public class CityCard extends DomCard {
       super( DomCardName.City);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(2);
       switch (owner.getCurrentGame().countEmptyPiles()) {
         case 0:

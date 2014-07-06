@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class SalvagerCard extends DomCard {
@@ -13,7 +14,7 @@ public class SalvagerCard extends DomCard {
       super( DomCardName.Salvager);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
         owner.addAvailableBuys( 1 );
         if (owner.getCardsInHand().isEmpty())
           return;

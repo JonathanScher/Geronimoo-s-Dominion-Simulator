@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class FollowersCard extends DomCard {
@@ -9,7 +10,7 @@ public class FollowersCard extends DomCard {
       super( DomCardName.Followers);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.drawCards(2);
       DomCard theEstate = owner.getCurrentGame().takeFromSupply( DomCardName.Estate);
       if (theEstate!=null) {

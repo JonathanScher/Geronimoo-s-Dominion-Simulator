@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -10,7 +11,7 @@ public class IronworksCard extends DomCard {
       super( DomCardName.Ironworks);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       DomCardName theDesiredCard=null; 
       if (!owner.getCardsFromHand(DomCardType.Action).isEmpty()){
     	//if we have more actions in hand we probably want to play them so find an action card to gain

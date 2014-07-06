@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Counting_HouseCard extends DomCard {
@@ -10,7 +11,7 @@ public class Counting_HouseCard extends DomCard {
       super( DomCardName.Counting_House);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       ArrayList<DomCard> theCoppers = owner.removeCardsFromDiscard(DomCardName.Copper);
       for (DomCard theCard : theCoppers) {
         owner.putInHand(theCard);

@@ -5,6 +5,7 @@ import java.util.Collections;
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomPlayStrategy;
 
@@ -13,7 +14,7 @@ public class GovernorCard extends DomCard {
       super( DomCardName.Governor);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.addActions(1);
       if (owner.getPlayStrategyFor(this)==DomPlayStrategy.GoldEarlyTrashMid) {
     	playGoldEarlyTrashMid();

@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomPlayer;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class Treasure_MapCard extends DomCard {
@@ -9,7 +10,7 @@ public class Treasure_MapCard extends DomCard {
       super( DomCardName.Treasure_Map );
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       DomPlayer theOwner = owner;
       theOwner.trash( theOwner.removeCardFromPlay(this ));
       if (theOwner.getCardsFromHand( DomCardName.Treasure_Map ).size()>0) {

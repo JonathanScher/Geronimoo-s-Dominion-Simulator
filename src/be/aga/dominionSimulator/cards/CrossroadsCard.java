@@ -1,6 +1,7 @@
 package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -9,7 +10,7 @@ public class CrossroadsCard extends DomCard {
       super( DomCardName.Crossroads);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
     	if (owner.getCardsFromPlay(DomCardName.Crossroads).size()==1)
           owner.addActions(3);
     	owner.drawCards(owner.getCardsFromHand(DomCardType.Victory).size());

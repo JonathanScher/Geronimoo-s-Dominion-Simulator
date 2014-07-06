@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomEngine;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class TraderCard extends DomCard {
@@ -13,7 +14,7 @@ public class TraderCard extends DomCard {
       super( DomCardName.Trader);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       if (!owner.getCardsInHand().isEmpty()) {
         Collections.sort( owner.getCardsInHand() , SORT_FOR_TRASHING);
         DomCard theCardToTrash = owner.getCardsInHand().get(0);
@@ -34,8 +35,8 @@ public class TraderCard extends DomCard {
       }
     }
     
-    public boolean react(DomCard aCard) {
-      if (DomEngine.haveToLog) DomEngine.addToLog( owner + " reveals " + this );
+    public boolean react(DomCard aCard, LogHandler logHandler) {
+      if (logHandler.getHaveToLog()) logHandler.addToLog( owner + " reveals " + this );
       lastTradedCard = aCard;
       owner.returnToSupply( aCard );
       owner.gain(DomCardName.Silver);

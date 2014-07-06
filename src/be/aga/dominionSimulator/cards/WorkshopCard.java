@@ -2,6 +2,7 @@ package be.aga.dominionSimulator.cards;
 
 import be.aga.dominionSimulator.DomCard;
 import be.aga.dominionSimulator.DomCost;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 
 public class WorkshopCard extends DomCard {
@@ -9,7 +10,7 @@ public class WorkshopCard extends DomCard {
       super( DomCardName.Workshop);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       DomCardName theDesiredCard = owner.getDesiredCard(new DomCost( 4, 0), false);
       if (theDesiredCard==null) {
         //possible to get here if card was throne-roomed

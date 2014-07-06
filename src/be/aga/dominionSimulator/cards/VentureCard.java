@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.cards;
 import java.util.ArrayList;
 
 import be.aga.dominionSimulator.DomCard;
+import be.aga.dominionSimulator.LogHandler;
 import be.aga.dominionSimulator.enums.DomCardName;
 import be.aga.dominionSimulator.enums.DomCardType;
 
@@ -11,7 +12,7 @@ public class VentureCard extends DomCard {
       super( DomCardName.Venture);
     }
 
-    public void play() {
+    public void play(LogHandler logHandler) {
       owner.availableCoins+=1;        
       ArrayList< DomCard > theRevealedCards = owner.revealUntilType( DomCardType.Treasure);
       for (DomCard theCard : theRevealedCards) {
