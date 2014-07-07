@@ -1,0 +1,16 @@
+
+I have a bug that I'm sick of tracking. Would you be better than I am?
+
+The "Main" class that lauches the genetic algorithm. 
+Make sure that the logger is not in "trace" before lunching it - or make sure you have a folder D:\temp and 6Go of free memory on your hdd (@see log4j.properties).
+
+Sometime during the simulation, my fitness can drop by 40 or more for the same candidate. It mean that a strategy that was doing 40% of wins against BigMoney is now doing 0%. 
+
+Would you be able to find out the origin of the bug?
+
+hints so far:
+- This bug occurs with my GA, but not with the regular simulator (I therefore suspect a race condition somewhere)
+- If you do not specify any BuyCondition, the bug is not present
+- When the bug arises, the log seems to show evidence that the candidate have been playing a BigMoney strategy on some of its game.
+
+I'm getting sick of that bug :/
