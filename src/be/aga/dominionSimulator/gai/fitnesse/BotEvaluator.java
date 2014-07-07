@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import be.aga.dominionSimulator.DomBoard;
@@ -13,7 +14,7 @@ import be.aga.dominionSimulator.DomPlayer;
 import be.aga.dominionSimulator.LogHandler;
 
 public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
-
+	public static final Logger LOGGER = Logger.getLogger(BotEvaluator.class);
 	private static final int GAMES_REQUIRED_FOR_GOOD_AVERAGE = 1000;
 	private List<DomBuyRule> opponentBuyRules;
 
@@ -35,8 +36,7 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 		return startSimulation(players, false);
 	}
 
-	public double startSimulation(List<DomPlayer> thePlayers,
-			boolean keepOrder) {
+	public double startSimulation(List<DomPlayer> thePlayers, boolean keepOrder) {
 		List<DomPlayer> players = new ArrayList<>();
 		List<Double> ratio = new ArrayList<>();
 		DomPlayer candidatePlayer = thePlayers.get(0);
@@ -50,12 +50,17 @@ public class BotEvaluator implements FitnessEvaluator<List<DomBuyRule>> {
 				Collections.shuffle(players);
 			}
 			LogHandler logHandler = new LogHandler();
-			logHandler.setHaveToLog(true);
+			if (LOGGER.isTraceEnabled()) {
+				logHandler.setHaveToLog(true);
+			}
 			DomGame theGame = new DomGame(theBoard, players, logHandler);
 			theGame.run();
 			theGame.determineWinners();
 			ratio.add(Double.valueOf(candidatePlayer.countVictoryPoints())
 					/ Double.valueOf(basePlayer.countVictoryPoints()));
+			LOGGER.trace("game with player "
+					+ candidatePlayer.getBuyRules().hashCode() + " ==="
+					+ logHandler.getMyLog());
 			theBoard = theGame.getBoard();
 			theBoard.reset();
 		}

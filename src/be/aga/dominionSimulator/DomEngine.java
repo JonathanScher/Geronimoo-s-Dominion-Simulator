@@ -215,7 +215,7 @@ public class DomEngine {
 			int aNumber, boolean aShowLog) {
 		emptyPilesEndingCount = 0;
 		NUMBER_OF_GAMES = aNumber;
-		logHandler.setLog("<BR><HR><B>Game Log</B><BR>");
+		logHandler.append("<BR><HR><B>Game Log</B><BR>");
 		long theStartTime = System.currentTimeMillis();
 		players.clear();
 		players.addAll(thePlayers);
@@ -264,12 +264,12 @@ public class DomEngine {
 		logHandler.addToLog("</i>");
 		logHandler.addToLog("!!!!!!!Game ends!!!!!!!!");
 		logHandler.addToLog("");
-		logHandler.addToStartOfLog("the Empty Piles : "
+		logHandler.appendNewParagraph("the Empty Piles : "
 				+ theGame.getEmptyPiles());
 		if (!theGame.getTrashedCards().isEmpty())
-			logHandler.addToStartOfLog("the Trashed Cards : "
+			logHandler.appendNewParagraph("the Trashed Cards : "
 					+ theGame.getTrashedCards());
-		logHandler.addToStartOfLog("");
+		logHandler.appendNewParagraph("");
 		String theEmbargoedStuff = theGame.getBoard().getEmbargoInfo();
 		if (theEmbargoedStuff != null) {
 			logHandler.addToLog("");

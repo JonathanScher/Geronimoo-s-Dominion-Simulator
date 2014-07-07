@@ -27,8 +27,8 @@ import be.aga.dominionSimulator.gai.selection.BotTournamentSelection;
 
 public class GeneticAlgorithm {
 
-	private static final int ELITES = 50;
-	private static final int INITIAL_POPULATION_SIZE = 100;
+	private static final int ELITES = 2;
+	private static final int INITIAL_POPULATION_SIZE = 10;
 	private static final double TOURNAMENT_PRESSURE = 0.9;
 
 	private List<EvolutionObserver<List<DomBuyRule>>> observers;
@@ -65,8 +65,8 @@ public class GeneticAlgorithm {
 		FitnessEvaluator<List<DomBuyRule>> cachedFE = new CachingFitnessEvaluator<>(
 				fitnessEvaluator);
 		EvolutionEngine<List<DomBuyRule>> engine = new GenerationalEvolutionEngine<>(
-				candidateFactory, evolutionScheme, new LogStrangeBehaviours(fitnessEvaluator),
-				selectionStrategy, rng);
+				candidateFactory, evolutionScheme, new LogStrangeBehaviours(
+						fitnessEvaluator), selectionStrategy, rng);
 
 		attachObserver(engine);
 

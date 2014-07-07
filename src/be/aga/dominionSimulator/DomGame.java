@@ -114,10 +114,10 @@ public class DomGame {
 		}
 		for (DomPlayer thePlayer : players) {
 			if (logHandler.getHaveToLog())
-				logHandler.addToStartOfLog("");
+				logHandler.appendNewParagraph("");
 			thePlayer.showDeck();
 			if (logHandler.getHaveToLog())
-				logHandler.addToStartOfLog("<B>"
+				logHandler.appendNewParagraph("<B>"
 						+ thePlayer
 						+ "</B> has "
 						+ thePlayer.countVictoryPoints()
@@ -142,19 +142,19 @@ public class DomGame {
 			}
 		}
 		if (logHandler.getHaveToLog())
-			logHandler.addToStartOfLog("");
+			logHandler.appendNewParagraph("");
 		for (DomPlayer thePlayer : players) {
 			if (thePlayer.countVictoryPoints() >= theMaxPoints
 					&& thePlayer.getTurns() <= theMinTurns) {
 				if (winners > 1) {
 					if (logHandler.getHaveToLog())
-						logHandler.addToStartOfLog(thePlayer
+						logHandler.appendNewParagraph(thePlayer
 								+ " ties for the win !!");
 					// if (players.get(0).pprUsed)
 					thePlayer.addTie();
 				} else {
 					if (logHandler.getHaveToLog())
-						logHandler.addToStartOfLog(thePlayer
+						logHandler.appendNewParagraph(thePlayer
 								+ " wins this game!!");
 					// if (players.get(0).pprUsed)
 					thePlayer.addWin();

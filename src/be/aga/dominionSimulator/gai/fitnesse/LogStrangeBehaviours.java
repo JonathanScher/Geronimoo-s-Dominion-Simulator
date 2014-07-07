@@ -3,6 +3,7 @@ package be.aga.dominionSimulator.gai.fitnesse;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
@@ -12,6 +13,7 @@ import be.aga.dominionSimulator.gai.BuyStrategy;
 import com.google.common.collect.MapMaker;
 
 public class LogStrangeBehaviours implements FitnessEvaluator<List<DomBuyRule>> {
+	private static final int ABNORMAL_BEHAVIOUR_THRESHOLD = 15;
 	private static final Logger LOGGER = Logger
 			.getLogger(LogStrangeBehaviours.class);
 	private final FitnessEvaluator<List<DomBuyRule>> delegate;
@@ -49,11 +51,14 @@ public class LogStrangeBehaviours implements FitnessEvaluator<List<DomBuyRule>> 
 		cache.put(candidate, fitness);
 
 		if (LOGGER.isInfoEnabled()) {
-			if (cachedFitness != null && Math.abs(fitness - cachedFitness) > 40) {
-				LOGGER.info("anormal behaviour: " + cachedFitness
+			if (cachedFitness != null && Math.abs(fitness - cachedFitness) > ABNORMAL_BEHAVIOUR_THRESHOLD) {
+				LOGGER.info("anormal behaviour for candidate"
+						+ candidate.hashCode() + ": " + cachedFitness
 						+ " becomes " + fitness);
 				BuyStrategy strategy = new BuyStrategy(candidate);
 				LOGGER.info(strategy);
+				LOGGER.setLevel(Level.INFO);
+				BotEvaluator.LOGGER.setLevel(Level.INFO);
 			}
 		}
 

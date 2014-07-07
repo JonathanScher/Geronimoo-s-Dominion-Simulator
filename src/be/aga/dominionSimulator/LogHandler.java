@@ -36,13 +36,13 @@ public class LogHandler {
 		myLog.append("<BR>");
 	}
 
-	public void addToStartOfLog(String string) {
-		myLog.insert(0, "<BR>");
-		myLog.insert(0, string);
+	public void appendNewParagraph(String string) {
+		myLog.append("<BR>");
+		myLog.append(string);
 	}
 
-	public void setLog(String string) {
-		myLog = new StringBuilder(string);
+	public void append(String string) {
+		myLog.append(string);
 	}
 
 	public void setHaveToLog(boolean haveToLog) {

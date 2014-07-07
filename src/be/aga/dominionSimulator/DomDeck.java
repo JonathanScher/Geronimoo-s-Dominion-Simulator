@@ -318,7 +318,7 @@ public class DomDeck extends EnumMap< DomCardName, ArrayList<DomCard> > {
         }
         theMessage.append( "]" );
         
-        getLogHandler().addToStartOfLog(theMessage.toString());
+        getLogHandler().appendNewParagraph(theMessage.toString());
     }
 
     /**
